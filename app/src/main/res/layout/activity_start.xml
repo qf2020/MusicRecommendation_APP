@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/start_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_start_bottom"
+        android:scaleType="centerCrop">
+
+    </ImageView>
+    <ImageView
+        android:layout_width="130dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="81dp"
+        android:src="@drawable/ic_start_icon">
+    </ImageView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="音乐时间\n好声音"
+        android:layout_marginLeft="93dp"
+        android:layout_marginTop="197dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="36dp">
+    </TextView>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="241dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="293dp"
+        android:src="@drawable/ic_start_mid">
+    </ImageView>
+    <ImageButton
+        android:layout_width="235dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="617dp"
+        android:src="@drawable/enter_bar_shape"
+        >
+
+    </ImageButton>
+</RelativeLayout>
