@@ -15,7 +15,7 @@
         android:id="@+id/navigation_music_list"
         android:name="me.wcy.music.activity.ui.music_list.MusicListFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_music_list" />
 
     <fragment
         android:id="@+id/navigation_personal_information"
