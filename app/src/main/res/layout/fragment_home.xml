@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="text3"
-            android:textSize="10dp">
+            android:textSize="0dp">
 
         </TextView>
     </me.wcy.music.activity.ui.home.NestedScrollingParent2Layout>

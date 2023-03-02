@@ -35,6 +35,7 @@ public class HomeFragment extends Fragment {
         //5、将适配器加载到控件中
         listView.setAdapter(adapter);
 
+        //使用自定义组件，下面部分显示不全，并且不显示bottomview
 
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
