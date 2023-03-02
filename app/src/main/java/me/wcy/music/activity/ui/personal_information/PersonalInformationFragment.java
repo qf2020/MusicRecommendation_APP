@@ -1,4 +1,4 @@
-package me.wcy.music.activity.ui.notifications;
+package me.wcy.music.activity.ui.personal_information;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,18 +10,18 @@ import android.support.v4.app.Fragment;
 import android.arch.lifecycle.ViewModelProvider;
 
 
-import me.wcy.music.databinding.FragmentNotificationsBinding;
+import me.wcy.music.databinding.FragmentPersonalInformationBinding;
 
-public class NotificationsFragment extends Fragment {
+public class PersonalInformationFragment extends Fragment {
 
-    private FragmentNotificationsBinding binding;
+    private FragmentPersonalInformationBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        NotificationsViewModel notificationsViewModel =
-                new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(NotificationsViewModel.class);
+        PersonalInformationViewModel notificationsViewModel =
+                new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(PersonalInformationViewModel.class);
 
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        binding = FragmentPersonalInformationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textNotifications;

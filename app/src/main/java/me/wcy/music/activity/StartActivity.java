@@ -12,6 +12,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import me.wcy.music.R;
+import me.wcy.music.databinding.ActivityHomeBinding;
+import me.wcy.music.databinding.ActivityStartBinding;
 
 public class StartActivity extends AppCompatActivity {
 
