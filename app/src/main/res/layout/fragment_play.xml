@@ -64,7 +64,7 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <me.wcy.music.widget.AlbumCoverView
+            <cjk.design.music.widget.AlbumCoverView
                 android:id="@+id/album_cover_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -79,7 +79,7 @@
 
                 <include layout="@layout/include_play_page_volume_bar" />
 
-                <me.wcy.lrcview.LrcView xmlns:lrc="http://schemas.android.com/apk/res-auto"
+                <cjk.design.lrcview.LrcView xmlns:lrc="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/lrc_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

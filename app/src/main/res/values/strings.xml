@@ -75,7 +75,7 @@
     <string name="no_permission_select_image">没有权限，无法选择图片！</string>
     <string name="activity_playlist">播放列表</string>
     <string name="title_activity_home">HomeActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">主页</string>
+    <string name="title_music_list">播客</string>
+    <string name="title_information">我的</string>
 </resources>

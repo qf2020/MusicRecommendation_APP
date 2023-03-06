@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="me.wcy.music"
+    package="cjk.design.music"
     tools:ignore="ProtectedPermissions">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -59,7 +59,7 @@
         </receiver>
         <receiver android:name=".receiver.StatusBarReceiver">
             <intent-filter>
-                <action android:name="me.wcy.music.STATUS_BAR_ACTIONS" />
+                <action android:name="cjk.design.music.STATUS_BAR_ACTIONS" />
             </intent-filter>
         </receiver>
 

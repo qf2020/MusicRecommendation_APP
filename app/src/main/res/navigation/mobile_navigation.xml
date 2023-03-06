@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="me.wcy.music.activity.ui.home.HomeFragment"
+        android:name="cjk.design.music.activity.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_music_list"
-        android:name="me.wcy.music.activity.ui.music_list.MusicListFragment"
-        android:label="@string/title_dashboard"
+        android:name="cjk.design.music.activity.ui.music_list.MusicListFragment"
+        android:label="@string/title_music_list"
         tools:layout="@layout/fragment_music_list" />
 
     <fragment
         android:id="@+id/navigation_personal_information"
-        android:name="me.wcy.music.activity.ui.personal_information.PersonalInformationFragment"
-        android:label="@string/title_notifications"
+        android:name="cjk.design.music.activity.ui.personal_information.PersonalInformationFragment"
+        android:label="@string/title_information"
         tools:layout="@layout/fragment_personal_information" />
 </navigation>
