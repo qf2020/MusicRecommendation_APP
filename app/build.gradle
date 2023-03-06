@@ -47,7 +47,10 @@ android {
         viewBinding true
     }
 }
-
+tasks.withType(JavaCompile) {
+    options.fork = true
+    options.forkOptions.jvmArgs += ["-Duser.language=en"]
+}
 def getLocalValue(String key) {
     return getLocalValue(key, false)
 }
