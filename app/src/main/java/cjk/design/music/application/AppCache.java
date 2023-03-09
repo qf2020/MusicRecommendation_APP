@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.util.LongSparseArray;
 import android.util.Log;
+import android.util.LongSparseArray;
 
 import com.amap.api.location.AMapLocalWeatherLive;
 

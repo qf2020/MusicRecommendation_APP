@@ -1,13 +1,13 @@
 package cjk.design.music.activity.ui.home;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.NestedScrollingParent2;
-import android.support.v4.view.NestedScrollingParentHelper;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.NestedScrollingParent2;
+import androidx.core.view.NestedScrollingParentHelper;
+import androidx.core.view.ViewCompat;
+
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,7 +104,7 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
             mNavView = getChildAt(1);
         }
         if (getChildCount() > 2) {
-            mViewPager = (ViewPager) getChildAt(2);
+            mViewPager =getChildAt(2);
         }
 
     }
@@ -124,8 +124,18 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        mCanScrollDistance = mTopView.getMeasuredHeight(); //- getResources().getDimension(R.dimen.normal_title_height);
+
+        int result = 0;
+        //获取状态栏高度的资源id
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+
+        mCanScrollDistance = mTopView.getMeasuredHeight()+ getResources().getDimension(R.dimen.normal_title_height)-result;
+        //getMeasuredHeight 获取到的是组件的高度，并没有包含margin等参数
         //这里实现了是否滑到顶部的效果
+        //final float scale = getContext().getResources().getDisplayMetrics().density;
     }
 
     @Override
@@ -140,7 +150,8 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
             mScrollChangeListener.onScroll(y / mCanScrollDistance);
         }//这个是调用渐变效果的
 
-        if (getScrollY() != y) super.scrollTo(x, y);
+//        if (getScrollY() != y)
+        super.scrollTo(x, y);
     }
 
 

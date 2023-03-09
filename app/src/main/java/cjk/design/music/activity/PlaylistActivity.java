@@ -1,11 +1,12 @@
 package cjk.design.music.activity;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.annotation.Nullable;
 
 import cjk.design.music.R;
 import cjk.design.music.adapter.OnMoreClickListener;

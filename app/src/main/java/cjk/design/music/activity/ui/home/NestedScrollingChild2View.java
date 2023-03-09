@@ -1,20 +1,19 @@
 package cjk.design.music.activity.ui.home;
 
-import static android.support.v4.view.ViewCompat.TYPE_NON_TOUCH;
-import static android.support.v4.view.ViewCompat.TYPE_TOUCH;
+import static androidx.core.view.ViewCompat.TYPE_NON_TOUCH;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v4.view.NestedScrollingChild2;
-import android.support.v4.view.NestedScrollingChildHelper;
-import android.support.v4.view.ViewCompat;
-import android.util.AttributeSet;
+
+import androidx.annotation.Nullable;
+import androidx.core.view.NestedScrollingChild2;
+import androidx.core.view.NestedScrollingChildHelper;
+import androidx.core.view.ViewCompat;
+
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import android.widget.LinearLayout;
 import android.widget.OverScroller;
-import android.widget.Scroller;
 
 public class NestedScrollingChild2View extends LinearLayout implements NestedScrollingChild2 {
 

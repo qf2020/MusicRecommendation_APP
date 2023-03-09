@@ -6,8 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.util.LruCache;
 import android.text.TextUtils;
+import android.util.LruCache;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

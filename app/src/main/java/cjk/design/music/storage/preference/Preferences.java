@@ -3,7 +3,8 @@ package cjk.design.music.storage.preference;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import cjk.design.music.R;
 

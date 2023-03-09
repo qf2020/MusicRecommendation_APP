@@ -1,8 +1,8 @@
 package cjk.design.music.activity;
 
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.io.File;
@@ -171,19 +170,20 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
         tvTitle.setText(mOnlineMusicList.getBillboard().getName());
         tvUpdateDate.setText(getString(R.string.recent_update, mOnlineMusicList.getBillboard().getUpdate_date()));
         tvComment.setText(mOnlineMusicList.getBillboard().getComment());
-        Glide.with(this)
-                .load(mOnlineMusicList.getBillboard().getPic_s640())
-                .asBitmap()
-                .placeholder(R.drawable.default_cover)
-                .error(R.drawable.default_cover)
-                .override(200, 200)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ivCover.setImageBitmap(resource);
-                        ivHeaderBg.setImageBitmap(ImageUtils.blur(resource));
-                    }
-                });
+        //这里因为改了版本号，所以不可用
+//        Glide.with(this)
+//                .load(mOnlineMusicList.getBillboard().getPic_s640())
+//                .asBitmap()
+//                .placeholder(R.drawable.default_cover)
+//                .error(R.drawable.default_cover)
+//                .override(200, 200)
+//                .into(new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                        ivCover.setImageBitmap(resource);
+//                        ivHeaderBg.setImageBitmap(ImageUtils.blur(resource));
+//                    }
+//                });
     }
 
     private void play(OnlineMusic onlineMusic) {
