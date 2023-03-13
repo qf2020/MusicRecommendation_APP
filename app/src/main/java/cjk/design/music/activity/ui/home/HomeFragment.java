@@ -33,7 +33,7 @@ import cjk.design.music.ScrollPicker.bean.ImageContent;
 import cjk.design.music.databinding.FragmentHomeBinding;
 
 
-//报错中，DrawerLayout的父布局中长宽必须设定一下，之前闪退报错，是因为父布局的fragment的height设置为0
+
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private FragmentHomeBinding binding;
@@ -62,13 +62,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         initData();
         initClick();
 
-
+        //报错中，DrawerLayout的父布局中长宽必须设定一下，之前闪退报错，是因为父布局的fragment的height设置为0
+        //明日任务：
         //个人界面
-        //搜索框 //采用xiaoyou的框架
-        //侧滑栏顶部
-        //scollpiker参数重新传入
-
-        //使用自定义组件，下面部分显示不全，并且不显示bottomview
+        //scrollpickerview让底部多滑上一些
+        //界面图片更新多一点
 
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
@@ -154,13 +152,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         System.out.println(tDatas);
         List<List<ImageContent>> sDatas = new ArrayList<>();
-        List<ImageContent> list = new ArrayList<ImageContent>();
-        list.add(new ImageContent("","https://img.51miz.com/Element/00/89/97/82/0ebdd98e_E899782_30ded6a3.png"));
-        list.add(new ImageContent("","https://img.51miz.com/Element/00/89/97/82/0ebdd98e_E899782_30ded6a3.png"));
-        list.add(new ImageContent("","https://img.51miz.com/Element/00/89/97/82/0ebdd98e_E899782_30ded6a3.png"));
-        sDatas.add(list);
-        sDatas.add(list);
-        sDatas.add(list);
+        List<ImageContent> list_recommendation = new ArrayList<ImageContent>();
+        list_recommendation.add(new ImageContent("",getResources().getDrawable(R.drawable.recommendation_1)));
+        list_recommendation.add(new ImageContent("",getResources().getDrawable(R.drawable.recommendation_2)));
+        list_recommendation.add(new ImageContent("",getResources().getDrawable(R.drawable.recommendation_3)));
+        sDatas.add(list_recommendation);
+        List<ImageContent> list_music_list = new ArrayList<ImageContent>();
+        list_music_list.add(new ImageContent("",getResources().getDrawable(R.drawable.music_list_1)));
+        list_music_list.add(new ImageContent("",getResources().getDrawable(R.drawable.music_list_2)));
+        list_music_list.add(new ImageContent("",getResources().getDrawable(R.drawable.music_list_3)));
+        sDatas.add(list_music_list);
+        sDatas.add(list_music_list);
 
         linearLayoutManager = new LinearLayoutManager(getContext());//初始化布局管理器
         binding.slRecycle.setLayoutManager(linearLayoutManager);//设置布局管理器

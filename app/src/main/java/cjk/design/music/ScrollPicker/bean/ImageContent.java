@@ -1,5 +1,7 @@
 package cjk.design.music.ScrollPicker.bean;
 
+import android.graphics.drawable.Drawable;
+
 /**
  * @author: cjk
  * @date: 2022/2/16
@@ -9,9 +11,9 @@ package cjk.design.music.ScrollPicker.bean;
  */
 public class ImageContent {
     private String imageText;
-    private String imageUrl;
+    private Drawable imageUrl;
 
-    public ImageContent(String imageText,String imageUrl) {
+    public ImageContent(String imageText,Drawable imageUrl) {
         this.imageText = imageText;
         this.imageUrl = imageUrl;
     }
@@ -24,11 +26,11 @@ public class ImageContent {
         this.imageText = imageText;
     }
 
-    public String getImageUrl() {
+    public Drawable getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(Drawable imageUrl) {
         this.imageUrl = imageUrl;
     }
 }

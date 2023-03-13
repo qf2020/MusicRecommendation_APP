@@ -25,12 +25,19 @@ public class HomeRecycleViewAdapter extends RecyclerView.Adapter<HomeRecycleView
     private Context mContext;
     private List<String> tDatas = new ArrayList<>();
     private List<List<ImageContent>> sDatas = new ArrayList<>();
+    private List<Integer> width = new ArrayList<>();
+    private List<Integer> height = new ArrayList<>();
 
     public HomeRecycleViewAdapter(Context context,List<String> Data1,List<List<ImageContent>> Data2) {
         mContext = context;
         tDatas.addAll(Data1);
         sDatas.addAll(Data2);
-
+        height.add(840);
+        height.add(700);
+        height.add(700);
+        width.add(768);
+        width.add(640);
+        width.add(640);
     }
 
     @NonNull
@@ -48,8 +55,8 @@ public class HomeRecycleViewAdapter extends RecyclerView.Adapter<HomeRecycleView
                 new ScrollPickerAdapter.ScrollPickerAdapterBuilder<ImageContent>(mContext)
                         .setDataList(sDatas.get(i))
                         .selectedItemOffset(0)
-                        .setSize(800,400)
-                        .setCorrect(true)
+                        .setSize(width.get(i),height.get(i))
+                        .setCorrect(false)
                         .visibleItemNumber(0)
                         .setDivideLineColor("#E5E5E5")
                         .setItemViewProvider(null);

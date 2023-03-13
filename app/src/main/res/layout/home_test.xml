@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:background="@color/grey_300">
 
-
         <View
             android:id="@+id/view_nike"
             android:layout_width="match_parent"
@@ -26,13 +25,13 @@
             android:layout_marginStart="@dimen/dp_16"
             android:layout_marginEnd="@dimen/dp_16"
             />
-
+        <!--            imSrc="@{vm.ui.imageUrl}"-->
+        <!--            error="@{@drawable/ic_banner_loading}"-->
         <ImageView
             android:id="@+id/img_head"
             android:layout_width="@dimen/dp_80"
             android:layout_height="@dimen/dp_80"
-            imSrc="@{vm.ui.imageUrl}"
-            error="@{@drawable/ic_banner_loading}"
+
             android:layout_margin="@dimen/dp_16"
             android:elevation="@dimen/dp_8"
             app:layout_constraintStart_toStartOf="parent"
@@ -116,9 +115,9 @@
             app:layout_constraintBottom_toBottomOf="@id/view_like_item"
             app:layout_constraintStart_toStartOf="@id/view_like_item"
             android:layout_marginStart="@dimen/dp_16"
-            rectangleSrc="@{vm.mineLikeCover}"
-            />
 
+            />
+        <!--            rectangleSrc="@{vm.mineLikeCover}"-->
         <TextView
             android:id="@+id/tv_introduction"
             android:layout_width="wrap_content"

@@ -8,7 +8,7 @@ buildscript {
         maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter' }
        // google()
         maven { url 'https://maven.aliyun.com/nexus/content/repositories/google' }
-        google()
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.2'
@@ -25,7 +25,6 @@ allprojects {
         // google()
         maven { url 'https://maven.aliyun.com/nexus/content/repositories/google' }
         maven { url 'https://jitpack.io' }
-        google()
     }
 }
 
