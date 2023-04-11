@@ -109,13 +109,19 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
 
     }
 
+    //这边是滑动高度，mViewPager的高度，要减去tabview和底部导航栏
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //先测量一次
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         //ViewPager修改后的高度= 总高度-TabLayout高度
         ViewGroup.LayoutParams lp = mViewPager.getLayoutParams();
-        lp.height = getMeasuredHeight() - mNavView.getMeasuredHeight();
+        int height = 0;
+        int resourceId =getResources().getIdentifier("navigation_bar_height","dimen","android");
+        if (resourceId > 0) {
+            height = getResources().getDimensionPixelSize(resourceId);
+        }
+        lp.height = getMeasuredHeight() - mNavView.getMeasuredHeight()-height;
         mViewPager.setLayoutParams(lp);
         //因为ViewPager修改了高度，所以需要重新测量
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -133,6 +139,7 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
         }
 
         mCanScrollDistance = mTopView.getMeasuredHeight()+ getResources().getDimension(R.dimen.normal_title_height)-result;
+        //这边可以理解为能够向上滑动的高度，如果是+表示滑动的更多，如果是-就能够向上滑动的更少。
         //getMeasuredHeight 获取到的是组件的高度，并没有包含margin等参数
         //这里实现了是否滑到顶部的效果
         //final float scale = getContext().getResources().getDisplayMetrics().density;

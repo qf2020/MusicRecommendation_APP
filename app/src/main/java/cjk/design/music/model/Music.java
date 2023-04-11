@@ -12,7 +12,6 @@ import java.io.Serializable;
 
 /**
  * 单曲信息
- * Created by wcy on 2015/11/27.
  */
 @Entity(nameInDb = "SystemMessage")
 public class Music implements Serializable {
@@ -48,14 +47,16 @@ public class Music implements Serializable {
     @Property(nameInDb = "fileSize")
     private long fileSize; // [本地]文件大小
 
-    @Generated(hash = 1263212761)
+
+
+    private String lrc;
+
     public Music() {
     }
-
-    @Generated(hash = 332465567)
+    @Generated(hash = 597927762)
     public Music(Long id, int type, long songId, String title, String artist,
-                 String album, long albumId, String coverPath, long duration,
-                 @NotNull String path, String fileName, long fileSize) {
+            String album, long albumId, String coverPath, long duration,
+            @NotNull String path, String fileName, long fileSize, String lrc) {
         this.id = id;
         this.type = type;
         this.songId = songId;
@@ -68,6 +69,7 @@ public class Music implements Serializable {
         this.path = path;
         this.fileName = fileName;
         this.fileSize = fileSize;
+        this.lrc = lrc;
     }
 
     public interface Type {
@@ -91,6 +93,14 @@ public class Music implements Serializable {
             return true;
         }
         return false;
+    }
+
+    public String getLrc() {
+        return lrc;
+    }
+
+    public void setLrc(String lrc) {
+        this.lrc = lrc;
     }
 
     public Long getId() {

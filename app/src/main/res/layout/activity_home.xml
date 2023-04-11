@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     >
 
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
@@ -24,10 +25,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        app:layout_constraintBottom_toTopOf="@id/fl_play_bar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/mobile_navigation" />
+        app:navGraph="@navigation/mobile_navigation"
+        />
+    <include
+        layout="@layout/include_play_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/play_bar_height"
+        app:layout_constraintBottom_toTopOf="@id/nav_view"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

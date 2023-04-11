@@ -28,7 +28,6 @@ import cjk.design.music.executor.ControlPanel;
 import cjk.design.music.executor.NaviMenuExecutor;
 import cjk.design.music.executor.WeatherExecutor;
 import cjk.design.music.fragment.LocalMusicFragment;
-import cjk.design.music.fragment.PlayFragment;
 import cjk.design.music.fragment.SheetListFragment;
 import cjk.design.music.service.AudioPlayer;
 import cjk.design.music.service.QuitTimer;
@@ -59,7 +58,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
     private View vNavigationHeader;
     private LocalMusicFragment mLocalMusicFragment;
     private SheetListFragment mSheetListFragment;
-    private PlayFragment mPlayFragment;
+    private MusicPlayActivity mMusicPlayActivity;
     private ControlPanel controlPanel;
     private NaviMenuExecutor naviMenuExecutor;
     private MenuItem timerItem;
@@ -200,11 +199,11 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.fragment_slide_up, 0);
-        if (mPlayFragment == null) {
-            mPlayFragment = new PlayFragment();
-            ft.replace(android.R.id.content, mPlayFragment);
+        if (mMusicPlayActivity == null) {
+            mMusicPlayActivity = new MusicPlayActivity();
+            ft.replace(android.R.id.content, null);
         } else {
-            ft.show(mPlayFragment);
+            ft.show(null);
         }
         ft.commitAllowingStateLoss();
         isPlayFragmentShow = true;
@@ -213,14 +212,14 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
     private void hidePlayingFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(0, R.anim.fragment_slide_down);
-        ft.hide(mPlayFragment);
+        ft.hide(null);
         ft.commitAllowingStateLoss();
         isPlayFragmentShow = false;
     }
 
     @Override
     public void onBackPressed() {
-        if (mPlayFragment != null && isPlayFragmentShow) {
+        if (mMusicPlayActivity != null && isPlayFragmentShow) {
             hidePlayingFragment();
             return;
         }

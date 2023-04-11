@@ -1,32 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
-
-    <include layout="@layout/include_app_bar" />
-
-    <FrameLayout
+    android:background="#26A69A"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <cjk.design.music.activity.ui.home.NestedScrollingParent2Layout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:attr/windowBackground">
+        android:id="@+id/search_layout">
 
-        <ListView
-            android:id="@+id/lv_search_music_list"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@null" />
+            android:fitsSystemWindows="true"
+            android:layout_marginTop="5dp"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="搜索"
+                android:textSize="25dp"
+                android:textColor="@color/white">
 
-        <include
-            android:id="@+id/ll_loading"
-            layout="@layout/include_loading"
-            android:visibility="gone" />
+            </TextView>
+        </androidx.appcompat.widget.Toolbar>
 
-        <include
-            android:id="@+id/ll_load_fail"
-            layout="@layout/include_load_fail"
-            android:visibility="gone" />
-    </FrameLayout>
-</LinearLayout>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/circle_shape_1"
+            android:id="@+id/search_nest_tab"
+            android:hint="搜索歌曲/音乐/专辑人"
+            android:padding="5dip"
+            android:textSize="16sp"
+            android:drawableLeft="@drawable/ic_menu_search"
+            android:drawableTint="@color/black"
+            android:focusable="false">
+
+        </EditText>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginTop="20dp"
+            >
+
+            <ListView
+                android:id="@+id/lv_search_music_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/recommendation_linearlayout_corner"
+                android:divider="@null" />
+
+            <include
+                layout="@layout/include_loading"
+                android:visibility="gone" />
+
+            <include
+                layout="@layout/include_load_fail"
+                android:visibility="gone" />
+        </FrameLayout>
+
+    </cjk.design.music.activity.ui.home.NestedScrollingParent2Layout>
+
+</RelativeLayout>
+
+
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="?attr/colorPrimary"-->
+<!--    android:fitsSystemWindows="true"-->
+<!--    android:orientation="vertical">-->
+
+<!--    <include layout="@layout/include_app_bar" />-->
+
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="?android:attr/windowBackground">-->
+
+<!--        <ListView-->
+<!--            android:id="@+id/lv_search_music_list"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:divider="@null" />-->
+
+<!--        <include-->
+<!--            android:id="@+id/ll_loading"-->
+<!--            layout="@layout/include_loading"-->
+<!--            android:visibility="gone" />-->
+
+<!--        <include-->
+<!--            android:id="@+id/ll_load_fail"-->
+<!--            layout="@layout/include_load_fail"-->
+<!--            android:visibility="gone" />-->
+<!--    </FrameLayout>-->
+<!--</LinearLayout>-->

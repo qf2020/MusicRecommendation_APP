@@ -10,9 +10,7 @@ import cjk.design.music.model.Music;
 import cjk.design.music.utils.NetworkUtils;
 import cjk.design.music.storage.preference.Preferences;
 
-/**
- * Created by hzwangchenyan on 2017/1/20.
- */
+
 public abstract class PlayMusic implements IExecutor<Music> {
     private Activity mActivity;
     protected Music music;
@@ -58,6 +56,7 @@ public abstract class PlayMusic implements IExecutor<Music> {
 
     protected abstract void getPlayInfo();
 
+    //checkCounter是用于检查步骤的，完成全部步骤之后才调用AudioPlay
     protected void checkCounter() {
         mCounter++;
         if (mCounter == mTotalStep) {

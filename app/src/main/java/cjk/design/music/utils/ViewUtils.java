@@ -22,7 +22,7 @@ public class ViewUtils {
                 fail.setVisibility(View.GONE);
                 break;
             case LOAD_FAIL:
-                success.setVisibility(View.GONE);
+                success.setVisibility(View.VISIBLE);
                 loading.setVisibility(View.GONE);
                 fail.setVisibility(View.VISIBLE);
                 break;

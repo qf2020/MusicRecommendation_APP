@@ -20,11 +20,11 @@ import java.util.List;
 
 import cjk.design.music.R;
 import cjk.design.music.base.BaseAdapter;
+import cjk.design.music.onLineMusicBean.PlaylistBean;
 
-public class PlayListAdapter extends BaseAdapter<RecyclerView.ViewHolder, PlaylistBean> {
+public class PlayListAdapter extends BaseAdapter<RecyclerView.ViewHolder, PlaylistBean.PlaylistsBean> {
     private static final String TAG = "PlayListAdapter";
-
-    private List<PlaylistBean> list = new ArrayList<>();
+    private List<PlaylistBean.PlaylistsBean> dataList = new ArrayList<>();
     private Context mContext;
     private OnPlayListClickListener listener;
     private int type;
@@ -35,17 +35,11 @@ public class PlayListAdapter extends BaseAdapter<RecyclerView.ViewHolder, Playli
     }
 
     @Override
-    public void notifyDataSetChanged(List<PlaylistBean> dataList) {
-//        list = dataList;
-        PlaylistBean playlistBean = new PlaylistBean();
-        playlistBean.setPlaylistCoverUrl("http://p2.music.126.net/oS3ZLQ66uGPMnnOJDzDlBw==/19093019417022416.jpg");
-        playlistBean.setPlaylistName("论钢琴的交响性：管弦乐名作及其钢琴改编");
-        for (int i = 0;i<20;i++){
-            list.add(playlistBean);
-        }
-        System.out.println("是否有数据"+playlistBean.getPlaylistCoverUrl());
+    public void notifyDataSetChanged(List<PlaylistBean.PlaylistsBean> dataList) {
+        this.dataList = dataList;
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @Override
@@ -58,9 +52,8 @@ public class PlayListAdapter extends BaseAdapter<RecyclerView.ViewHolder, Playli
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof ViewHolder) {
             ViewHolder vh = (ViewHolder) viewHolder;
-            PlaylistBean bean = list.get(i);
-
-            vh.setPlayListInfo(mContext, bean);
+            PlaylistBean.PlaylistsBean playlistsBean = dataList.get(i);
+            vh.setPlayListInfo(mContext, playlistsBean);
             vh.onSetListClickListener(listener, i);
         }
     }
@@ -72,7 +65,7 @@ public class PlayListAdapter extends BaseAdapter<RecyclerView.ViewHolder, Playli
     //type == 1 展示6个  type == 2 展示3个
     @Override
     public int getItemCount() {
-        return list == null ? 0 : type == 1 ? 6 : list.size();
+        return dataList == null ? 0 : type == 1 ? 6 : dataList.size();
     }
 
 
@@ -89,13 +82,13 @@ public class PlayListAdapter extends BaseAdapter<RecyclerView.ViewHolder, Playli
             tvPlayListName = itemView.findViewById(R.id.tv_playlist_name);
         }
 
-        void setPlayListInfo(Context context, PlaylistBean bean) {
+        void setPlayListInfo(Context context, PlaylistBean.PlaylistsBean bean) {
             Glide.with(context)
-                    .load(bean.getPlaylistCoverUrl())
+                    .load(bean.getCoverImgUrl())
                     .transition(new DrawableTransitionOptions().crossFade())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(50)))
                     .into(imgPlayList);
-            tvPlayListName.setText(bean.getPlaylistName());
+            tvPlayListName.setText(bean.getName());
         }
 
         void onSetListClickListener(OnPlayListClickListener listener, int position) {

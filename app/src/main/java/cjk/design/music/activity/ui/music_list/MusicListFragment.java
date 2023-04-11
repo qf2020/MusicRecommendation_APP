@@ -2,29 +2,44 @@ package cjk.design.music.activity.ui.music_list;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cjk.design.music.activity.PlayList.PlayListActivity;
+import cjk.design.music.activity.lazy.WowContract;
+import cjk.design.music.activity.lazy.WowPresenter;
+import cjk.design.music.base.BaseFragment;
 import cjk.design.music.databinding.FragmentMusicListBinding;
+import cjk.design.music.http.HttpCallback;
+import cjk.design.music.http.HttpClient;
+import cjk.design.music.onLineMusicBean.PlaylistBean;
 
-public class MusicListFragment extends Fragment {
+public class MusicListFragment extends BaseFragment<WowPresenter> implements WowContract.View {
 
     private FragmentMusicListBinding binding;
     private PlayListAdapter adapter;
 
-    private List<PlaylistBean> list = new ArrayList<>();
+    private PlaylistBean playlist = new PlaylistBean();
     private GridLayoutManager manager;
+
+    //每行加载3个
+    private static final int INIT_LOAD_LINE = 3;
+    //总共加载30行
+    private static final int TOTAL_LOAD_LINE = 30;
+    private int totalPage = 3;
+    List<PlaylistBean.PlaylistsBean> list = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,10 +51,9 @@ public class MusicListFragment extends Fragment {
 
         //还需美化
         // 懒加载还没实现出来。
-        //自定义了一个playlistRecommendationscrollview，目前还不确定其作用，后续可以再看看
-        initData();
+        //自定义了一个playlistRecommendationscrollview，解决滑动冲突的
+        SearchPlayList();
         initView();
-        addInfoToPager();
 
         return root;
     }
@@ -48,12 +62,35 @@ public class MusicListFragment extends Fragment {
 
     }
 
+    private void SearchPlayList(){
+        HttpClient.getPlayList(new HttpCallback<PlaylistBean>() {
+            @Override
+            public void onSuccess(PlaylistBean playlistBean) {
+                if (playlistBean == null || playlistBean.getPlaylists() == null) {
+                    System.out.println("进入了这里吗2");
+                    onFail(null);
+                    return;
+                }
+                playlist = playlistBean;
+                System.out.println("进入了这里吗1");
+                initData(playlist);
+                addInfoToPager(playlist);
+                hideDialog();
+                lazyLoadPlayList(3);
+            }
 
-    protected void initData() {
-        list.clear();
+            @Override
+            public void onFail(Exception e) {
 
+            }
+        });
+
+    }
+
+    protected void initData(PlaylistBean playlistBean) {
+
+        showDialog();
         adapter = new PlayListAdapter(getContext());
-        adapter.notifyDataSetChanged(list);
         adapter.setType(2);
         adapter.setListener(listener);
         manager = new GridLayoutManager(getContext(), 3);
@@ -61,37 +98,41 @@ public class MusicListFragment extends Fragment {
         binding.musicCommonList.addOnScrollListener(new EndlessRecyclerOnScrollListener(manager) {
             @Override
             public void onLoadMore(int currentPage) {
-                //LogUtil.d(TAG, "onLoadMore");
+                showDialog();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {//延迟是模仿网络获取数据的，到时候看看接口是否支持，支持则进行更改
+                    @Override
+                    public void run() {
+                        lazyLoadPlayList(3);
+                        hideDialog();
+                    }
+                }, 2000);
             }
         });
+
         binding.musicCommonList.setHasFixedSize(true);
         binding.musicCommonList.setAdapter(adapter);
 
 
     }
     private PlayListAdapter.OnPlayListClickListener listener = position -> {
-//        if (playlist != null || !playlist.isEmpty()) {
-//            Intent intent = new Intent(getActivity(), PlayListActivity.class);
-//            HighQualityPlayListBean.PlaylistsBean bean = playlist.get(position + 3);
-//            String playlistName = bean.getName();
-//            intent.putExtra(PLAYLIST_NAME, playlistName);
-//            String playlistPicUrl = bean.getCoverImgUrl();
-//            intent.putExtra(PLAYLIST_PICURL, playlistPicUrl);
-//            String playlistCreatorNickName = bean.getCreator().getNickname();
-//            intent.putExtra(PLAYLIST_CREATOR_NICKNAME, playlistCreatorNickName);
-//            String playlistCreatorAvatarUrl = bean.getCreator().getAvatarUrl();
-//            intent.putExtra(PLAYLIST_CREATOR_AVATARURL, playlistCreatorAvatarUrl);
-//            long playlistId = bean.getId();
-//            intent.putExtra(PLAYLIST_ID, playlistId);
-//            startActivity(intent);
-//        }
+        if (playlist.getPlaylists() != null || !playlist.getPlaylists().isEmpty()){
+            Intent intent = new Intent(getActivity(), PlayListActivity.class);
+            intent.putExtra("playListId",String.valueOf(playlist.getPlaylists().get(position+3).getId()));
+            intent.putExtra("playListCover",playlist.getPlaylists().get(position+3).getCoverImgUrl());
+            intent.putExtra("playListName",playlist.getPlaylists().get(position+3).getName());
+            intent.putExtra("playListDescription",playlist.getPlaylists().get(position+3).getDescription());
+            startActivity(intent);
+        }
+
     };
 
-    private void addInfoToPager() {
+    private void addInfoToPager(PlaylistBean playlistBean) {
         for (int i = 0; i < 3; i++) {
             PlayListCover cover = new PlayListCover(getContext());
-            cover.setCover("http://p2.music.126.net/oS3ZLQ66uGPMnnOJDzDlBw==/19093019417022416.jpg");
-            cover.setText("论钢琴的交响性：管弦乐名作及其钢琴改编");
+            cover.setCover(playlistBean.getPlaylists().get(i).getCoverImgUrl());
+            cover.setText(playlistBean.getPlaylists().get(i).getName());
+            binding.musicListRecommendation.setClickListener(playlistClickListener);
             binding.musicListRecommendation.addView(cover);
             MusicListRecommendationPager.RikkaLayoutParams lp = (MusicListRecommendationPager.RikkaLayoutParams) cover.getLayoutParams();
             lp.setFrom(i);
@@ -100,10 +141,54 @@ public class MusicListFragment extends Fragment {
         }
 
     }
-
+    MusicListRecommendationPager.OnPlayListClickListener playlistClickListener = position -> {
+        if (playlist.getPlaylists() != null || !playlist.getPlaylists().isEmpty()){
+            Intent intent = new Intent(getActivity(), PlayListActivity.class);
+            intent.putExtra("playListId",String.valueOf(playlist.getPlaylists().get(position).getId()));
+            intent.putExtra("playListCover",playlist.getPlaylists().get(position).getCoverImgUrl());
+            intent.putExtra("playListName",playlist.getPlaylists().get(position).getName());
+            intent.putExtra("playListDescription",playlist.getPlaylists().get(position).getDescription());
+            startActivity(intent);
+        }
+    };
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void lazyLoadPlayList(int page) {
+        if (playlist.getPlaylists().size() == 0 || totalPage >= 30) {
+            return;
+        }
+        list.addAll(playlist.getPlaylists().subList(totalPage,totalPage+page * INIT_LOAD_LINE));
+        totalPage += page * INIT_LOAD_LINE;
+        adapter.notifyDataSetChanged(list);
+    }
+
+
+    @Override
+    protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return null;
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    public WowPresenter onCreatePresenter() {
+        return null;
+    }
+
+    @Override
+    protected void initVariables(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 }

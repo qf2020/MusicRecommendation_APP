@@ -14,10 +14,16 @@ import java.util.concurrent.TimeUnit;
 
 import cjk.design.music.model.ArtistInfo;
 import cjk.design.music.model.DownloadInfo;
+import cjk.design.music.model.DownloadInfo1;
 import cjk.design.music.model.Lrc;
 import cjk.design.music.model.OnlineMusicList;
 import cjk.design.music.model.SearchMusic;
+import cjk.design.music.model.SearchMusic1;
 import cjk.design.music.model.Splash;
+import cjk.design.music.onLineMusicBean.MusicLrc;
+import cjk.design.music.onLineMusicBean.PlaylistBean;
+import cjk.design.music.onLineMusicBean.PlaylistDetailBean;
+import cjk.design.music.onLineMusicBean.SongInfoBean;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 
@@ -26,6 +32,8 @@ import okhttp3.OkHttpClient;
  */
 public class HttpClient {
     private static final String SPLASH_URL = "http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1";
+    private static final String ip = "http://192.168.30.92:3000";
+
     private static final String BASE_URL = "http://tingapi.ting.baidu.com/v1/restserver/ting";
     private static final String METHOD_GET_MUSIC_LIST = "baidu.ting.billboard.billList";
     private static final String METHOD_DOWNLOAD_MUSIC = "baidu.ting.song.play";
@@ -125,10 +133,54 @@ public class HttpClient {
                 });
     }
 
+    //获取歌曲url
+    public static void getMusicUrl(String songId, @NonNull final HttpCallback<DownloadInfo1> callback) {
+        OkHttpUtils.get().url(ip+"/song/url")
+                .addParams("id", songId)
+                .build()
+                .execute(new JsonCallback<DownloadInfo1>(DownloadInfo1.class) {
+                    @Override
+                    public void onResponse(DownloadInfo1 response, int id) {
+                        callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void getMusicCover(String songId, @NonNull final HttpCallback<SongInfoBean> callback) {
+        OkHttpUtils.get().url(ip+"/song/detail")
+                .addParams("ids", songId)
+                .build()
+                .execute(new JsonCallback<SongInfoBean>(SongInfoBean.class) {
+                    @Override
+                    public void onResponse(SongInfoBean response, int id) {
+                        callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
     public static void getMusicDownloadInfo(String songId, @NonNull final HttpCallback<DownloadInfo> callback) {
-        OkHttpUtils.get().url(BASE_URL)
-                .addParams(PARAM_METHOD, METHOD_DOWNLOAD_MUSIC)
-                .addParams(PARAM_SONG_ID, songId)
+        OkHttpUtils.get().url(ip+"/song/url")
+                .addParams("id", songId)
                 .build()
                 .execute(new JsonCallback<DownloadInfo>(DownloadInfo.class) {
                     @Override
@@ -147,6 +199,50 @@ public class HttpClient {
                     }
                 });
     }
+
+    public static void getPlayList( @NonNull final HttpCallback<PlaylistBean> callback) {
+        OkHttpUtils.get().url(ip+"/top/playlist")
+                .addParams("limit", "30")
+                .build()
+                .execute(new JsonCallback<PlaylistBean>(PlaylistBean.class) {
+                    @Override
+                    public void onResponse(PlaylistBean response, int id) {
+                        callback.onSuccess(response);
+                    }
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void getPlayListDetail(String playListID, @NonNull final HttpCallback<PlaylistDetailBean> callback) {
+        OkHttpUtils.get().url(ip+"/playlist/detail")
+                .addParams("id", playListID)
+                .build()
+                .execute(new JsonCallback<PlaylistDetailBean>(PlaylistDetailBean.class) {
+                    @Override
+                    public void onResponse(PlaylistDetailBean response, int id) {
+                        callback.onSuccess(response);
+                    }
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+
 
     public static void getBitmap(String url, @NonNull final HttpCallback<Bitmap> callback) {
         OkHttpUtils.get().url(url).build()
@@ -191,14 +287,36 @@ public class HttpClient {
                 });
     }
 
-    public static void searchMusic(String keyword, @NonNull final HttpCallback<SearchMusic> callback) {
-        OkHttpUtils.get().url(BASE_URL)
-                .addParams(PARAM_METHOD, METHOD_SEARCH_MUSIC)
-                .addParams(PARAM_QUERY, keyword)
+    public static void getMusicLrc(String songId, @NonNull final HttpCallback<MusicLrc> callback) {
+        OkHttpUtils.get().url(ip+"/lyric")
+                .addParams("id", songId)
                 .build()
-                .execute(new JsonCallback<SearchMusic>(SearchMusic.class) {
+                .execute(new JsonCallback<MusicLrc>(MusicLrc.class) {
                     @Override
-                    public void onResponse(SearchMusic response, int id) {
+                    public void onResponse(MusicLrc response, int id) {
+                        callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+
+    public static void searchMusic(String keyword, @NonNull final HttpCallback<SearchMusic1> callback) {
+        OkHttpUtils.get().url(ip+"/search")
+                .addParams("keywords", keyword)
+                .build()
+                .execute(new JsonCallback<SearchMusic1>(SearchMusic1.class) {
+                    @Override
+                    public void onResponse(SearchMusic1 response, int id) {
                         callback.onSuccess(response);
                     }
 

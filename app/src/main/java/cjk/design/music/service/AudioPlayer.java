@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import cjk.design.music.application.Notifier;
+import cjk.design.music.application.Notifier3;
 import cjk.design.music.enums.PlayModeEnum;
 import cjk.design.music.model.Music;
 import cjk.design.music.receiver.NoisyAudioStreamReceiver;
@@ -21,7 +22,7 @@ import cjk.design.music.storage.preference.Preferences;
 import cjk.design.music.utils.ToastUtils;
 
 /**
- * Created by hzwangchenyan on 2018/1/26.
+ *
  */
 public class AudioPlayer {
     private static final int STATE_IDLE = 0;
@@ -37,7 +38,7 @@ public class AudioPlayer {
     private Handler handler;
     private NoisyAudioStreamReceiver noisyReceiver;
     private IntentFilter noisyFilter;
-    private List<Music> musicList;
+    private List<Music> musicList = new ArrayList<>(); //歌曲列表部分 Music是歌单信息
     private final List<OnPlayerEventListener> listeners = new ArrayList<>();
     private int state = STATE_IDLE;
 
@@ -47,6 +48,7 @@ public class AudioPlayer {
 
     private static class SingletonHolder {
         private static AudioPlayer instance = new AudioPlayer();
+        //之所以这样实现是为了全局变量实现
     }
 
     private AudioPlayer() {
@@ -54,7 +56,11 @@ public class AudioPlayer {
 
     public void init(Context context) {
         this.context = context.getApplicationContext();
-        musicList = DBManager.get().getMusicDao().queryBuilder().build().list();
+//        Uri setDataSourceuri = Uri.parse("android.resource://cjk.design.music/"+ R.raw.yanyuan_xuezhiqian);
+//        Music music = new Music((long)1,1,01,"演员","薛之谦","热血专辑",01,"http://p2.music.126.net/oS3ZLQ66uGPMnnOJDzDlBw==/19093019417022416.jpg",344000,setDataSourceuri.toString(),null,100);
+        // musicList = DBManager.get().getMusicDao().queryBuilder().build().list();//这边获取音乐list
+//        MusicData musicData = new MusicData();
+//        musicList.addAll(musicData.musicList);
         audioFocusManager = new AudioFocusManager(context);
         mediaPlayer = new MediaPlayer();
         handler = new Handler(Looper.getMainLooper());
@@ -87,12 +93,22 @@ public class AudioPlayer {
         int position = musicList.indexOf(music);
         if (position < 0) {
             musicList.add(music);
-            DBManager.get().getMusicDao().insert(music);
+            //DBManager.get().getMusicDao().insert(music);
+            //这个是数据库插入数据但是我还没弄
             position = musicList.size() - 1;
         }
         play(position);
     }
+    //加歌曲
+    public void add(Music music) {
+        int position = musicList.indexOf(music);
+        if (position < 0) {
+            musicList.add(music);
+            //DBManager.get().getMusicDao().insert(music);
+        }
+    }
 
+    //播放歌曲位置
     public void play(int position) {
         if (musicList.isEmpty()) {
             return;
@@ -108,14 +124,16 @@ public class AudioPlayer {
         Music music = getPlayMusic();
 
         try {
+            Uri setDataSourceuri = Uri.parse(music.getPath());
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(music.getPath());
+            mediaPlayer.setDataSource(context,setDataSourceuri);
             mediaPlayer.prepareAsync();
             state = STATE_PREPARING;
             for (OnPlayerEventListener listener : listeners) {
                 listener.onChange(music);
             }
-            Notifier.get().showPlay(music);
+            Notifier3.get().cancelAll();
+            Notifier3.get().showPlay(music);
             MediaSessionManager.get().updateMetaData(music);
             MediaSessionManager.get().updatePlaybackState();
         } catch (IOException e) {
@@ -143,6 +161,7 @@ public class AudioPlayer {
         }
     }
 
+    //播放
     public void playPause() {
         if (isPreparing()) {
             stopPlayer();
@@ -160,11 +179,12 @@ public class AudioPlayer {
             return;
         }
 
-        if (audioFocusManager.requestAudioFocus()) {
+        if (audioFocusManager.requestAudioFocus() && true) {
             mediaPlayer.start();
             state = STATE_PLAYING;
             handler.post(mPublishRunnable);
-            Notifier.get().showPlay(getPlayMusic());
+            Notifier3.get().cancelAll();
+            Notifier3.get().showPlay(getPlayMusic());
             MediaSessionManager.get().updatePlaybackState();
             context.registerReceiver(noisyReceiver, noisyFilter);
 
@@ -186,7 +206,7 @@ public class AudioPlayer {
         mediaPlayer.pause();
         state = STATE_PAUSE;
         handler.removeCallbacks(mPublishRunnable);
-        Notifier.get().showPause(getPlayMusic());
+        Notifier3.get().showPause(getPlayMusic());
         MediaSessionManager.get().updatePlaybackState();
         context.unregisterReceiver(noisyReceiver);
         if (abandonAudioFocus) {

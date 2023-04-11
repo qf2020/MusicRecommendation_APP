@@ -9,7 +9,6 @@ import cjk.design.music.application.AppCache;
 import cjk.design.music.constants.Actions;
 
 /**
- * Created by hzwangchenyan on 2017/8/8.
  */
 public class QuitTimer {
     private Context context;

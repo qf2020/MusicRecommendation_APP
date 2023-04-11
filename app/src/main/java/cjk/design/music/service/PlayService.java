@@ -9,12 +9,11 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import cjk.design.music.application.Notifier;
+import cjk.design.music.application.Notifier3;
 import cjk.design.music.constants.Actions;
 
 /**
  * 音乐播放后台服务
- * Created by wcy on 2015/11/27.
  */
 public class PlayService extends Service {
     private static final String TAG = "Service";
@@ -29,9 +28,10 @@ public class PlayService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "onCreate: " + getClass().getSimpleName());
+        //播放器初始化
         AudioPlayer.get().init(this);
         MediaSessionManager.get().init(this);
-        Notifier.get().init(this);
+        Notifier3.get().init(this);
         QuitTimer.get().init(this);
     }
 
@@ -62,6 +62,6 @@ public class PlayService extends Service {
     private void stop() {
         AudioPlayer.get().stopPlayer();
         QuitTimer.get().stop();
-        Notifier.get().cancelAll();
+        Notifier3.get().cancelAll();
     }
 }

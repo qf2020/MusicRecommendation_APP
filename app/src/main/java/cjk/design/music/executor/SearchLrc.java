@@ -10,7 +10,6 @@ import cjk.design.music.utils.FileUtils;
 
 /**
  * 如果本地歌曲没有歌词则从网络搜索歌词
- * Created by wcy on 2016/4/26.
  */
 public abstract class SearchLrc implements IExecutor<String> {
     private String artist;
@@ -28,22 +27,22 @@ public abstract class SearchLrc implements IExecutor<String> {
     }
 
     private void searchLrc() {
-        HttpClient.searchMusic(title + "-" + artist, new HttpCallback<SearchMusic>() {
-            @Override
-            public void onSuccess(SearchMusic response) {
-                if (response == null || response.getSong() == null || response.getSong().isEmpty()) {
-                    onFail(null);
-                    return;
-                }
-
-                downloadLrc(response.getSong().get(0).getSongid());
-            }
-
-            @Override
-            public void onFail(Exception e) {
-                onExecuteFail(e);
-            }
-        });
+//        HttpClient.searchMusic(title + "-" + artist, new HttpCallback<SearchMusic>() {
+//            @Override
+//            public void onSuccess(SearchMusic response) {
+//                if (response == null || response.getSong() == null || response.getSong().isEmpty()) {
+//                    onFail(null);
+//                    return;
+//                }
+//
+//                downloadLrc(response.getSong().get(0).getSongid());
+//            }
+//
+//            @Override
+//            public void onFail(Exception e) {
+//                onExecuteFail(e);
+//            }
+//        });
     }
 
     private void downloadLrc(String songId) {

@@ -1,6 +1,7 @@
 package cjk.design.music.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 
@@ -17,14 +18,13 @@ import cjk.design.music.application.AppCache;
 import cjk.design.music.model.Music;
 
 /**
- * 文件工具类
- * Created by wcy on 2016/1/3.
  */
 public class FileUtils {
     private static final String MP3 = ".mp3";
     private static final String LRC = ".lrc";
 
     private static String getAppDir() {
+
         return Environment.getExternalStorageDirectory() + "/PonyMusic";
     }
 
@@ -151,9 +151,12 @@ public class FileUtils {
     }
 
     public static void saveLrcFile(String path, String content) {
+
+        System.out.println("进入下载行列"+path);
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(path));
             bw.write(content);
+            System.out.println("存储成功");
             bw.flush();
             bw.close();
         } catch (IOException e) {

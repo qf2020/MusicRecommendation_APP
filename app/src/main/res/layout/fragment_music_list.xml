@@ -47,13 +47,11 @@
 
     </RelativeLayout>
 
-    <cjk.design.music.activity.ui.music_list.PlayListRecommendScrollerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/home_tool_bar">
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/home_tool_bar">
             <cjk.design.music.activity.ui.music_list.MusicListRecommendationPager
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +69,7 @@
             </androidx.recyclerview.widget.RecyclerView>
         </RelativeLayout>
 
-    </cjk.design.music.activity.ui.music_list.PlayListRecommendScrollerView>
+
 
 
 </RelativeLayout>

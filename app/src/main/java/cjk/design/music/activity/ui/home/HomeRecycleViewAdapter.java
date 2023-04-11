@@ -27,6 +27,7 @@ public class HomeRecycleViewAdapter extends RecyclerView.Adapter<HomeRecycleView
     private List<List<ImageContent>> sDatas = new ArrayList<>();
     private List<Integer> width = new ArrayList<>();
     private List<Integer> height = new ArrayList<>();
+    private ItemListener itemListener;
 
     public HomeRecycleViewAdapter(Context context,List<String> Data1,List<List<ImageContent>> Data2) {
         mContext = context;
@@ -59,31 +60,27 @@ public class HomeRecycleViewAdapter extends RecyclerView.Adapter<HomeRecycleView
                         .setCorrect(false)
                         .visibleItemNumber(0)
                         .setDivideLineColor("#E5E5E5")
-                        .setItemViewProvider(null);
-//                        .setOnClickListener(new ScrollPickerAdapter.OnItemClickListener() {
-//                            @Override
-//                            public void onItemClick(View v,int position) {
-//                                Intent intent = new Intent(getContext(), PerformenceActivity.class);
-//                                switch (position){
-//                                    case 0:
-//                                        intent.putExtra("sifu", "汪天稳");
-//                                        break;
-//                                    case 1:
-//                                        intent.putExtra("sifu", "朱国强");
-//                                        break;
-//                                    case 2:
-//                                        intent.putExtra("sifu", "刘勇周");
-//                                        break;
-//                                }
-//                                startActivity(intent);
-//
-//                            }
-//                        });
+                        .setItemViewProvider(null)
+                        .setOnClickListener(new ScrollPickerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View v,int position) {
+                                int position1 = itemHolder.getAdapterPosition();
+                                itemListener.ItemClick(position1,position);
+
+                            }
+                        });
         ScrollPickerAdapter mScrollPickerAdapter = builder.build();
         itemHolder.scrollPickerView.setAdapter(mScrollPickerAdapter);
 
     }
 
+    public void setItemListener(ItemListener itemListener){
+        this.itemListener = itemListener;
+    }
+
+    public interface ItemListener{
+        void ItemClick(int position,int ScrollPosition);
+    }
     @Override
     public int getItemCount() {
         return 3;

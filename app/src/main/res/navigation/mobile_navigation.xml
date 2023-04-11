@@ -16,9 +16,10 @@
         android:name="cjk.design.music.activity.ui.music_list.MusicListFragment"
         android:label="@string/title_music_list"
         tools:layout="@layout/fragment_music_list" />
-
+    <!--        android:name="cjk.design.music.activity.ui.personal_information.PersonalInformationFragment"-->
     <fragment
         android:id="@+id/navigation_personal_information"
+
         android:name="cjk.design.music.activity.ui.personal_information.PersonalInformationFragment"
         android:label="@string/title_information"
         tools:layout="@layout/fragment_personal_information" />

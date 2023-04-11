@@ -1,6 +1,7 @@
 package cjk.design.music.activity.ui.home;
 
 import android.animation.ArgbEvaluator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +30,11 @@ import java.util.List;
 
 import cjk.design.music.R;
 import cjk.design.music.ScrollPicker.bean.ImageContent;
+import cjk.design.music.activity.Recommendation.RecommendationFirstActivity;
+import cjk.design.music.activity.Recommendation.RecommendationSecondActivity;
+import cjk.design.music.activity.Recommendation.RecommendationThirdActivity;
+import cjk.design.music.activity.SearchMusicActivity;
 import cjk.design.music.databinding.FragmentHomeBinding;
-
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
@@ -63,10 +66,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         initClick();
 
         //报错中，DrawerLayout的父布局中长宽必须设定一下，之前闪退报错，是因为父布局的fragment的height设置为0
+
         //明日任务：
-        //个人界面
-        //scrollpickerview让底部多滑上一些
-        //界面图片更新多一点
+        //个人界面（完成小部分）
+        //完成状态栏颜色的调整(已经美化一部分）
+        //美化侧边栏显示(已经美化一部分）
+        //完成歌词展示(歌词切换bug解决了，但是是利用父布局进行点击事件解决的）,歌词展示雏形完成
+        //完成新歌速递的界面和搜索界面
+        //优化歌曲背景加载导致缓慢，我们不一定需要里面加载出来，优先加载默认图片，等待正在图片加载出来后显示就行，只要不出现加载错误现象就行。（不急着实现）
 
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
@@ -105,6 +112,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onSearchClick(String keyword) {
                 //searchInfo.setText(keyword);
+                //Intent intent = new Intent(getActivity(), MusicPlayActivity.class);
+                Intent intent = new Intent(getActivity(), SearchMusicActivity.class);
+                intent.putExtra("keyword",keyword);
+                startActivity(intent);
             }
 
             /**
@@ -168,6 +179,36 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         binding.slRecycle.setLayoutManager(linearLayoutManager);//设置布局管理器
         binding.slRecycle.setItemAnimator(new DefaultItemAnimator());//设置动画
         recycleviewAdapter = new HomeRecycleViewAdapter(getContext(),tDatas,sDatas);//初始化适配器
+        recycleviewAdapter.setItemListener(new HomeRecycleViewAdapter.ItemListener() {
+            @Override
+            public void ItemClick(int position, int ScrollPosition) {
+                switch (position){
+                    case 0 :
+                        //这里是调用推荐歌单的
+                        if (ScrollPosition == 0){
+                            Intent intent = new Intent(getActivity(), RecommendationFirstActivity.class);
+                            startActivity(intent);
+                            //这里是美好的约会
+                        }else if(ScrollPosition == 1){
+                            Intent intent = new Intent(getActivity(), RecommendationSecondActivity.class);
+                            startActivity(intent);
+                        }else{
+                            Intent intent = new Intent(getActivity(), RecommendationThirdActivity.class);
+                            startActivity(intent);
+                        }
+
+                        break;
+                    case 1:
+                        //这里是新歌速递
+                        break;
+                    case 2:
+                        //这里是排行榜
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
         binding.slRecycle.setAdapter(recycleviewAdapter);//设置适配器
 
 

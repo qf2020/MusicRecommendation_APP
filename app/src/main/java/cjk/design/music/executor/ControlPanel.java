@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import cjk.design.music.R;
-import cjk.design.music.activity.PlaylistActivity;
+import cjk.design.music.activity.Playlist1Activity;
 import cjk.design.music.model.Music;
 import cjk.design.music.service.AudioPlayer;
 import cjk.design.music.service.OnPlayerEventListener;
@@ -18,7 +18,7 @@ import cjk.design.music.utils.binding.Bind;
 import cjk.design.music.utils.binding.ViewBinder;
 
 /**
- * Created by hzwangchenyan on 2018/1/26.
+ * 播放器
  */
 public class ControlPanel implements View.OnClickListener, OnPlayerEventListener {
     @Bind(R.id.iv_play_bar_cover)
@@ -29,8 +29,6 @@ public class ControlPanel implements View.OnClickListener, OnPlayerEventListener
     private TextView tvPlayBarArtist;
     @Bind(R.id.iv_play_bar_play)
     private ImageView ivPlayBarPlay;
-    @Bind(R.id.iv_play_bar_next)
-    private ImageView ivPlayBarNext;
     @Bind(R.id.v_play_bar_playlist)
     private ImageView vPlayBarPlaylist;
     @Bind(R.id.pb_play_bar)
@@ -39,7 +37,6 @@ public class ControlPanel implements View.OnClickListener, OnPlayerEventListener
     public ControlPanel(View view) {
         ViewBinder.bind(this, view);
         ivPlayBarPlay.setOnClickListener(this);
-        ivPlayBarNext.setOnClickListener(this);
         vPlayBarPlaylist.setOnClickListener(this);
         onChange(AudioPlayer.get().getPlayMusic());
     }
@@ -50,12 +47,9 @@ public class ControlPanel implements View.OnClickListener, OnPlayerEventListener
             case R.id.iv_play_bar_play:
                 AudioPlayer.get().playPause();
                 break;
-            case R.id.iv_play_bar_next:
-                AudioPlayer.get().next();
-                break;
             case R.id.v_play_bar_playlist:
                 Context context = vPlayBarPlaylist.getContext();
-                Intent intent = new Intent(context, PlaylistActivity.class);
+                Intent intent = new Intent(context, Playlist1Activity.class);
                 context.startActivity(intent);
                 break;
         }

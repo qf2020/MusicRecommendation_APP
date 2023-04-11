@@ -85,6 +85,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (mToolbar == null) {
             throw new IllegalStateException("Layout is required to include a Toolbar with id 'toolbar'");
         }
+        mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

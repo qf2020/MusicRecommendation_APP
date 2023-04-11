@@ -18,4 +18,7 @@
     <color name="grey_300_96p">#F5E0E0E0</color>
     <color name="grey_900">#212121</color>
     <color name="grey_900_96p">#F5212121</color>
+    <color name="recommendation_first">#6D44B5</color>
+    <color name="recommendation_second">#26A69A</color>
+    <color name="recommendation_third">#5E35B1</color>
 </resources>

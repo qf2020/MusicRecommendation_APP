@@ -11,18 +11,17 @@ import java.util.List;
 
 import cjk.design.music.R;
 import cjk.design.music.model.SearchMusic;
+import cjk.design.music.model.SearchMusic1;
 import cjk.design.music.utils.binding.Bind;
 import cjk.design.music.utils.binding.ViewBinder;
 
 /**
- * 搜索结果适配器
- * Created by hzwangchenyan on 2016/1/13.
  */
 public class SearchMusicAdapter extends BaseAdapter {
-    private List<SearchMusic.Song> mData;
+    private List<SearchMusic1.ResultBean.SongsBean> mData;
     private OnMoreClickListener mListener;
 
-    public SearchMusicAdapter(List<SearchMusic.Song> data) {
+    public SearchMusicAdapter(List<SearchMusic1.ResultBean.SongsBean> data) {
         mData = data;
     }
 
@@ -51,8 +50,8 @@ public class SearchMusicAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.tvTitle.setText(mData.get(position).getSongname());
-        holder.tvArtist.setText(mData.get(position).getArtistname());
+        holder.tvTitle.setText(mData.get(position).getName());
+        holder.tvArtist.setText(mData.get(position).getArtists().get(0).getName());
         holder.ivMore.setOnClickListener(v -> mListener.onMoreClick(position));
         holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);
         return convertView;
