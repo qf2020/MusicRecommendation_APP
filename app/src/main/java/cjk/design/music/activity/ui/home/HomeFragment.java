@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private HomeRecycleViewAdapter recycleviewAdapter;//适配器
     SearchFragment<String> searchFragment;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 

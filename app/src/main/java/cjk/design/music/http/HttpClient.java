@@ -184,14 +184,14 @@ public class HttpClient {
                 });
     }
 
-    public static void getIsExistUser(String phone,String password,@NonNull final HttpCallback<MusicLikeBean> callback) {
+    public static void getIsExistUser(String phone,String password,@NonNull final HttpCallback<LoginBean> callback) {
         OkHttpUtils.get().url(MUSIC_RUOYI+"/user/user_manage/list")
                 .addParams("phone", phone)
                 .addParams("password", password)
                 .build()
-                .execute(new JsonCallback<MusicLikeBean>(MusicLikeBean.class) {
+                .execute(new JsonCallback<LoginBean>(LoginBean.class) {
                     @Override
-                    public void onResponse(MusicLikeBean response, int id) {
+                    public void onResponse(LoginBean response, int id) {
                         callback.onSuccess(response);
                     }
                     @Override

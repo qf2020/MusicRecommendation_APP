@@ -35,8 +35,12 @@ import java.util.List;
 import cjk.design.music.R;
 import cjk.design.music.activity.HomeActivity;
 import cjk.design.music.activity.signup.SignUpActivity;
+import cjk.design.music.activity.ui.personal_information.MusicLikeBean;
 import cjk.design.music.databinding.ActivityMainLoginBinding;
 import cjk.design.music.databinding.ActivityMyInfoBinding;
+import cjk.design.music.http.HttpCallback;
+import cjk.design.music.http.HttpClient;
+import cjk.design.music.model.Music;
 
 /**
  * @description 登录活动
@@ -218,6 +222,21 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 String loginName,loginPaswd;
                 loginName=nameLayout.getText().toString();
                 loginPaswd=passwordLayout.getText().toString();
+                HttpClient.getIsExistUser("1","123",new HttpCallback<LoginBean>() {
+                    @Override
+                    public void onSuccess(LoginBean loginBean) {
+                        if (loginBean == null) {
+                            onFail(null);
+                            return;
+                        }
+                        //这边写成功的语句
+                    }
+
+                    @Override
+                    public void onFail(Exception e) {
+                        //这边写失败的语句
+                    }
+                });
                 if(true){
                     int identData[] = new int[5];
                     SharedPreferences sharedPreferences = getSharedPreferences("CountUser", MODE_PRIVATE);
@@ -226,12 +245,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     for(int i = 0;i<count+1;i++){
                         SharedPreferences sharedPreferences1 = getSharedPreferences("user"+i, MODE_PRIVATE);
                         String temp = sharedPreferences1.getString("userPhone","");
-                        //&&
-//                                            if(userBean.getData().getPhone().equals(temp)){
-//                                                int currentRole = sharedPreferences1.getInt("userRole",-1);
-//                                                identData[currentRole] = 1;
-//                                                isFirst++;
-//                                            }
+
                     }
                     if(true){
                         Intent inte = new Intent(LoginActivity.this, HomeActivity.class);
