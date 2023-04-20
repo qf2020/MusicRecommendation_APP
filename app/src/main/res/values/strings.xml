@@ -78,4 +78,10 @@
     <string name="title_home">主页</string>
     <string name="title_music_list">播客</string>
     <string name="title_information">我的</string>
+
+    <string name="login_consent_1">点击同意用户手册</string>
+    <string name="user_service">《用户服务协议》&#160;</string>
+    <string name="privacy_policy">《隐私政策》&#160;</string>
+    <string name="login_consent_2">，保护您的账户安全及隐私;</string>
+
 </resources>

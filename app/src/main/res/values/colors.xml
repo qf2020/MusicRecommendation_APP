@@ -21,4 +21,8 @@
     <color name="recommendation_first">#6D44B5</color>
     <color name="recommendation_second">#26A69A</color>
     <color name="recommendation_third">#5E35B1</color>
+    <color name="accord">#FF1A65EE</color>
+    <color name="colorAccent">#7e7e7e</color>
+    <color name="red0">#ff0000</color>
+    <color name="blue0">#576B95</color>
 </resources>

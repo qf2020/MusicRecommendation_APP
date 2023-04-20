@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--个人信息 活动-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/person_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <!--头像-->
+    <LinearLayout
+        android:id="@+id/person_info_portrait_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        android:paddingBottom="10dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/person_info_portrait_ri"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="15dp"
+            android:scaleType="fitXY"
+            >
+        </ImageView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改头像"
+            android:textColor="@color/grey"
+            android:layout_gravity="center"
+            android:paddingLeft="15dp"/>
+
+    </LinearLayout>
+    <!--姓名-->
+    <cjk.design.music.activity.ui.personal_information.ItemNameEdit
+        android:id="@+id/person_info_name_ig"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:edt_hint_content="修改昵称"
+        app:paddingLeft="10dp"
+        app:title="姓名" >
+    </cjk.design.music.activity.ui.personal_information.ItemNameEdit>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#F5F5F5"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#F5F5F5"/>
+    <!--性别-->
+    <cjk.design.music.activity.ui.personal_information.ItemGroupView
+        android:id="@+id/person_info_gender_ig"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:edt_hint_content="性别"
+        app:paddingLeft="15dp"
+        app:title="性别">
+    </cjk.design.music.activity.ui.personal_information.ItemGroupView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#F5F5F5"/>
+    <!--住址-->
+    <cjk.design.music.activity.ui.personal_information.ItemGroupView
+        android:id="@+id/person_info_region_ig"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@color/white"
+        app:edt_hint_content="未选择"
+        app:paddingLeft="15dp"
+        app:title="常住地" >
+    </cjk.design.music.activity.ui.personal_information.ItemGroupView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#F5F5F5"/>
+    <!--生日-->
+    <cjk.design.music.activity.ui.personal_information.ItemGroupView
+        android:id="@+id/person_info_birthday_ig"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        app:edt_hint_content="未选择"
+        android:background="@color/white"
+        app:paddingLeft="15dp"
+        app:title="生日" >
+    </cjk.design.music.activity.ui.personal_information.ItemGroupView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#F5F5F5"/>
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>

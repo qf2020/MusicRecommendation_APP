@@ -12,6 +12,7 @@
     <item android:title="其他">
         <menu>
             <item
+                android:id="@+id/quitLogin"
                 android:title="退出登录" />
             <!--android:icon="@drawable/qr_logo"-->
             <item

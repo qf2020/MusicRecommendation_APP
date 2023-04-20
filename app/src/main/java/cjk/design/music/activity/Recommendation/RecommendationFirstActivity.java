@@ -11,14 +11,10 @@ import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import cjk.design.music.Data.MusicData;
-import cjk.design.music.R;
 import cjk.design.music.activity.MusicPlayActivity;
-import cjk.design.music.adapter.MusicListRecycleAdapter;
+import cjk.design.music.adapter.MusicRecycleAdapter;
 import cjk.design.music.databinding.ActivityRecommendationFirstBinding;
 
 public class RecommendationFirstActivity extends AppCompatActivity {
@@ -26,7 +22,7 @@ public class RecommendationFirstActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private ActivityRecommendationFirstBinding binding;
-    private MusicListRecycleAdapter adapter;
+    private MusicRecycleAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +60,8 @@ public class RecommendationFirstActivity extends AppCompatActivity {
         sStr.setSpan(new AbsoluteSizeSpan(25, true),6,sStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.recommendationFirstCollapsingToolbar.setTitle(sStr);
         MusicData musicData  = new MusicData();
-        adapter = new MusicListRecycleAdapter(this,musicData.musicList,1);
-        adapter.setOnItemListener(new MusicListRecycleAdapter.ItemListener() {
+        adapter = new MusicRecycleAdapter(this,musicData.musicList,1);
+        adapter.setOnItemListener(new MusicRecycleAdapter.ItemListener() {
             @Override
             public void ItemOnClick(int position) {
                 Intent intent = new Intent(RecommendationFirstActivity.this, MusicPlayActivity.class);

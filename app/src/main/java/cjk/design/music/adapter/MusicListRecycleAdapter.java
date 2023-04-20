@@ -22,16 +22,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cjk.design.music.R;
+import cjk.design.music.activity.ui.personal_information.MusicListLikeBean;
+import cjk.design.music.http.HttpCallback;
+import cjk.design.music.http.HttpClient;
 import cjk.design.music.model.Music;
+import cjk.design.music.onLineMusicBean.PlaylistDetailBean;
 
 public class MusicListRecycleAdapter extends RecyclerView.Adapter<MusicListRecycleAdapter.MusicViewHolder>{
 
-    private List<Music> mDatas = new ArrayList<>();
+    private List<MusicListLikeBean.RowsBean> mDatas = new ArrayList<>();
     private Context context;
     private ItemListener itemListener;
+    private LoveListener loveListener;
     private int mode;
 
-    public MusicListRecycleAdapter(Context context,List<Music> sDatas,int mode){
+    public MusicListRecycleAdapter(Context context, List<MusicListLikeBean.RowsBean> sDatas, int mode){
         this.context = context;
         mDatas.addAll(sDatas);
         this.mode = mode;
@@ -48,13 +53,31 @@ public class MusicListRecycleAdapter extends RecyclerView.Adapter<MusicListRecyc
     @Override
     public void onBindViewHolder(@NonNull MusicListRecycleAdapter.MusicViewHolder  holder, int position) {
 
-        Glide.with(context).load(mDatas.get(position).getCoverPath())
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .error(Drawable.createFromPath("#00000000"))
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(50)))
-                .into(holder.musciCover);
-        holder.musicName.setText(mDatas.get(position).getTitle());
-        holder.musicArtist.setText(mDatas.get(position).getArtist());
+        HttpClient.getPlayListDetail(String.valueOf(mDatas.get(position).getMusicListId()), new HttpCallback<PlaylistDetailBean>() {
+            @Override
+            public void onSuccess(PlaylistDetailBean playlistDetailBean) {
+                if (playlistDetailBean == null || playlistDetailBean.getPlaylist().getTracks() == null) {
+                    onFail(null);
+                    return;
+                }
+                holder.musicName.setText(playlistDetailBean.getPlaylist().getName());
+                holder.musicArtist.setText(playlistDetailBean.getPlaylist().getDescription());
+                Glide.with(context).load(playlistDetailBean.getPlaylist().getCoverImgUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .error(Drawable.createFromPath("#00000000"))
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(50)))
+                        .into(holder.musciCover);
+            }
+            @Override
+            public void onFail(Exception e) {
+                holder.musicName.setText("无");
+                holder.musicArtist.setText("无");
+                Glide.with(context).load(Drawable.createFromPath("#00000000"))
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(50)))
+                        .into(holder.musciCover);
+            }
+        });
 
         holder.musicListCL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,37 +86,36 @@ public class MusicListRecycleAdapter extends RecyclerView.Adapter<MusicListRecyc
                 itemListener.ItemOnClick(position);
             }
         });
+
+        holder.musicLove.setTag("selected");
+        holder.musicLove.setColorFilter(Color.parseColor("#F44336"));
+
+
         holder.musicLove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               if (holder.musicLove.getTag().equals("unselected")){
 
-                   //奇怪现象，只能调用Color,调用R.color的值会失败
-                   switch (mode){
-                       case 1:
-                           holder.musicLove.setColorFilter(Color.parseColor("#6D44B5"));
+                if (holder.musicLove.getTag().equals("unselected")){
+                    holder.musicLove.setColorFilter(Color.parseColor("#F44336"));
+                    holder.musicLove.setTag("selected");
+                }else{
+                    holder.musicLove.clearColorFilter();
+                    holder.musicLove.setTag("unselected");
+                }
 
-                           break;
-                       case 2:
-                           holder.musicLove.setColorFilter(Color.parseColor("#26A69A"));
-                           break;
-                       case 3:
-                           holder.musicLove.setColorFilter(Color.parseColor("#5E35B1"));
-                           break;
-                   }
-                   holder.musicLove.setTag("selected");
-               }else{
-                   holder.musicLove.clearColorFilter();
-                   holder.musicLove.setTag("unselected");
-               }
 
+                int position = holder.getAdapterPosition();
+                loveListener.ItemOnClick(String.valueOf(holder.musicLove.getTag()),position);
             }
         });
+
 
     }
 
 
-
+    public interface LoveListener{
+        void ItemOnClick(String tag,int position);
+    }
     public interface ItemListener{
         void ItemOnClick(int position);
     }
@@ -101,7 +123,9 @@ public class MusicListRecycleAdapter extends RecyclerView.Adapter<MusicListRecyc
     public void setOnItemListener(ItemListener itemListener){
         this.itemListener = itemListener;
     }
-
+    public void setOnLoveListener(LoveListener loveListener){
+        this.loveListener = loveListener;
+    }
     @Override
     public int getItemCount() {
         return mDatas.size();

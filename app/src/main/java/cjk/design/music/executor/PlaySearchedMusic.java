@@ -6,15 +6,10 @@ import android.text.TextUtils;
 
 import java.io.File;
 
-import cjk.design.music.adapter.MusicListRecycleAdapter;
 import cjk.design.music.http.HttpCallback;
 import cjk.design.music.http.HttpClient;
-import cjk.design.music.model.DownloadInfo;
 import cjk.design.music.model.DownloadInfo1;
-import cjk.design.music.model.Lrc;
-import cjk.design.music.model.SearchMusic;
 import cjk.design.music.model.Music;
-import cjk.design.music.model.SearchMusic1;
 import cjk.design.music.onLineMusicBean.MusicLrc;
 import cjk.design.music.onLineMusicBean.SongInfoBean;
 import cjk.design.music.utils.FileUtils;

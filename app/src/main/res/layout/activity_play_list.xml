@@ -23,12 +23,21 @@
             android:textColor="@color/white">
 
         </TextView>
+        <ImageView
+            android:id="@+id/music_list_love"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/love"
+            android:tag="unselected"
+            />
     </androidx.appcompat.widget.Toolbar>
 
 
     <cjk.design.music.activity.PlayList.NestedScrollingParent2PlayListLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/sick_layout"
         android:layout_below="@id/toolbar"
         android:layout_marginTop="110dp"
@@ -61,7 +70,7 @@
         <RelativeLayout
             android:layout_width="200dp"
             android:layout_height="48dp"
-            android:background="@drawable/bg_buttonstart_corner"
+            android:background="@drawable/bg_buttonstart_corner1"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:id="@+id/playlist_start">

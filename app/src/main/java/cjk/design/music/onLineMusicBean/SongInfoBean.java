@@ -113,7 +113,7 @@ public class SongInfoBean {
         private int djId;
         private int copyright;
         private int s_id;
-        private int mark;
+        private String mark;
         private int originCoverType;
         private Object originSongSimpleData;
         private Object tagPicList;
@@ -342,11 +342,11 @@ public class SongInfoBean {
             this.s_id = s_id;
         }
 
-        public int getMark() {
+        public String getMark() {
             return mark;
         }
 
-        public void setMark(int mark) {
+        public void setMark(String mark) {
             this.mark = mark;
         }
 

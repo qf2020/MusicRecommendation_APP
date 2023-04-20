@@ -20,6 +20,7 @@ import java.util.List;
 import cjk.design.music.activity.PlayList.PlayListActivity;
 import cjk.design.music.activity.lazy.WowContract;
 import cjk.design.music.activity.lazy.WowPresenter;
+import cjk.design.music.activity.ui.personal_information.MusicListLikeBean;
 import cjk.design.music.base.BaseFragment;
 import cjk.design.music.databinding.FragmentMusicListBinding;
 import cjk.design.music.http.HttpCallback;
@@ -117,16 +118,39 @@ public class MusicListFragment extends BaseFragment<WowPresenter> implements Wow
     }
     private PlayListAdapter.OnPlayListClickListener listener = position -> {
         if (playlist.getPlaylists() != null || !playlist.getPlaylists().isEmpty()){
-            Intent intent = new Intent(getActivity(), PlayListActivity.class);
-            intent.putExtra("playListId",String.valueOf(playlist.getPlaylists().get(position+3).getId()));
-            intent.putExtra("playListCover",playlist.getPlaylists().get(position+3).getCoverImgUrl());
-            intent.putExtra("playListName",playlist.getPlaylists().get(position+3).getName());
-            intent.putExtra("playListDescription",playlist.getPlaylists().get(position+3).getDescription());
-            startActivity(intent);
+
+            HttpClient.getMusicLikeList("1",new HttpCallback<MusicListLikeBean>() {
+                @Override
+                public void onSuccess(MusicListLikeBean playlistBean) {
+                    if (playlistBean == null || playlistBean.getRows() == null) {
+                        onFail(null);
+                        return;
+
+
+                    }
+                    Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                    intent.putExtra("playListId",String.valueOf(playlist.getPlaylists().get(position+3).getId()));
+                    intent.putExtra("playListCover",playlist.getPlaylists().get(position+3).getCoverImgUrl());
+                    intent.putExtra("playListName",playlist.getPlaylists().get(position+3).getName());
+                    intent.putExtra("playListDescription",playlist.getPlaylists().get(position+3).getDescription());
+                    for (int i = 0;i<playlistBean.getRows().size();i++){
+                        if (playlistBean.getRows().get(i).getMusicListId() == playlist.getPlaylists().get(position+3).getId()){
+                            intent.putExtra("isLove",1);
+                        }
+                    }
+                    startActivity(intent);
+
+                }
+
+                @Override
+                public void onFail(Exception e) {
+                    System.out.println(e);
+                }
+            });
+
         }
 
     };
-
     private void addInfoToPager(PlaylistBean playlistBean) {
         for (int i = 0; i < 3; i++) {
             PlayListCover cover = new PlayListCover(getContext());
@@ -148,6 +172,7 @@ public class MusicListFragment extends BaseFragment<WowPresenter> implements Wow
             intent.putExtra("playListCover",playlist.getPlaylists().get(position).getCoverImgUrl());
             intent.putExtra("playListName",playlist.getPlaylists().get(position).getName());
             intent.putExtra("playListDescription",playlist.getPlaylists().get(position).getDescription());
+            intent.putExtra("isLove",3);
             startActivity(intent);
         }
     };

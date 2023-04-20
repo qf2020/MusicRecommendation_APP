@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="20dip"
+    android:orientation="vertical"
+    android:padding="10dip"
+    tools:ignore="UselessParent">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/videoTab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#00000000"
+        app:tabSelectedTextColor="@color/accord"
+        app:tabTextColor="@color/black"
+        app:tabIndicatorColor="@color/accord"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabIndicator="@drawable/center_tab_line"
+        app:tabBackground="@null"
+        app:tabRippleColor="@null">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="密码登录"
+            />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="验证码登录"
+            />
+    </com.google.android.material.tabs.TabLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="+86"
+            android:textSize="16sp"
+            android:gravity="center">
+
+        </TextView>
+        <View
+
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@color/colorAccent"
+            android:layout_gravity="bottom"
+
+            />
+        <EditText
+            android:id="@+id/login_tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:textCursorDrawable="@null"
+            android:hint="请输入手机号"
+            android:padding="5dip"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:digits="0123456789"/>
+
+    </LinearLayout>
+    <View
+        android:layout_height="2px"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/colorAccent" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="密码"
+            android:textSize="16sp"
+            android:gravity="center">
+
+        </TextView>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp">
+            <EditText
+                android:id="@+id/login_passwd"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#00000000"
+                android:hint="请输入密码"
+                android:padding="5dip"
+                android:textSize="16sp"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@null"
+                />
+
+            <cjk.design.music.activity.login.CountDownView
+                android:id="@+id/login_message"
+                android:layout_width="70dp"
+                android:layout_height="25dp"
+                android:layout_gravity="right|center"
+                android:text="获取验证码"
+                android:textColor="@color/black"
+                android:background="@drawable/btn_bg_selector"
+                android:gravity="center"
+                android:textSize="10dp"
+                android:visibility="gone"/>
+        </FrameLayout>
+
+    </LinearLayout>
+    <View
+        android:layout_height="2px"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/colorAccent" />
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/red0"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

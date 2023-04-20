@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--拍照的选择框（选择拍照或相册或取消）-->
+<!--郭晓哲 11/20-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#55555555">
+
+    <TextView
+        android:id="@+id/photo_select_take_photo_text"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_above="@+id/photo_select_line_text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="拍照"
+        android:textColor="#0479FE"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/photo_select_line_text"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/photo_select_from_albums_text"
+        android:layout_height="0.1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#D9D8D3" />
+
+    <TextView
+        android:id="@+id/photo_select_from_albums_text"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_above="@+id/photo_select_cancel_text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="从相册选择"
+        android:textColor="#0479FE"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/photo_select_cancel_text"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="取 消"
+            android:textColor="#0479FE"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</RelativeLayout>

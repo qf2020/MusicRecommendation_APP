@@ -5,5 +5,5 @@
     <corners android:radius="10dp"/>
 
     <!-- 设置框内填充颜色 -->
-    <solid android:color="#6236FF" />
+    <solid android:color="#EAA135" />
 </shape>

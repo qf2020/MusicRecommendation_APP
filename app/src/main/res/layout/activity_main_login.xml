@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/login_relative"
+    android:background="#E4ADD6"
+    >
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_start_mid"
+        android:scaleType="fitEnd">
+
+    </ImageView>
+    <LinearLayout
+        android:id="@+id/miaoshu_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="享听"
+            android:textColor="#201362"
+            android:textSize="60dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp">
+            <Button
+                android:layout_width="46dp"
+                android:layout_height="27dp"
+                android:text="app"
+                android:background="@drawable/shadowbt"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#201362">
+
+            </Button>
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="52dp"
+                android:text="音乐时间，好时间"
+                >
+
+            </TextView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/login_RL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miaoshu_ll"
+        android:layout_centerInParent="true"
+        >
+
+        <include
+            android:id="@+id/input_layout"
+            layout="@layout/login_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="220dip" />
+
+
+        <TextView
+            android:id="@+id/main_btn_login_text"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/input_layout"
+
+            android:layout_centerInParent="true"
+            android:layout_marginTop="15dip"
+            android:background="@drawable/btn_bg_selector"
+            android:gravity="center"
+            android:paddingLeft="15dip"
+            android:paddingTop="2dip"
+            android:paddingRight="15dip"
+            android:paddingBottom="2dip"
+            android:text="登录"
+            android:textColor="@drawable/btn_text_selector"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/other_ll"
+        android:layout_below="@+id/login_RL"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="31dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/sign_up_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="注册账号"
+            android:textColor="@drawable/btn_text_selector"
+            android:layout_marginRight="10sp"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="16sp"
+            android:background="@color/black"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <TextView
+            android:id="@+id/forget_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:gravity="center_vertical"
+            android:text="忘记密码"
+            android:textColor="@drawable/btn_text_selector"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/shake_ll"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_below="@+id/login_RL"
+        android:layout_marginTop="76dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/android"
+            android:layout_width="43dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:id="@+id/tv_agreement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp" />
+    </LinearLayout>
+
+
+</RelativeLayout>

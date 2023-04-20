@@ -5,13 +5,25 @@ import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.FileCallBack;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONObject;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import cjk.design.music.activity.login.LoginBean;
+import cjk.design.music.activity.ui.personal_information.MusicLikeBean;
+import cjk.design.music.activity.ui.personal_information.MusicListLikeBean;
+import cjk.design.music.activity.ui.personal_information.UserInformationBean;
 import cjk.design.music.model.ArtistInfo;
 import cjk.design.music.model.DownloadInfo;
 import cjk.design.music.model.DownloadInfo1;
@@ -25,7 +37,9 @@ import cjk.design.music.onLineMusicBean.PlaylistBean;
 import cjk.design.music.onLineMusicBean.PlaylistDetailBean;
 import cjk.design.music.onLineMusicBean.SongInfoBean;
 import okhttp3.Call;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 
 /**
  * Created by hzwangchenyan on 2017/2/8.
@@ -33,7 +47,7 @@ import okhttp3.OkHttpClient;
 public class HttpClient {
     private static final String SPLASH_URL = "http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1";
     private static final String ip = "http://192.168.30.92:3000";
-
+    private static final String MUSIC_RUOYI = "http://192.168.30.92:8080";
     private static final String BASE_URL = "http://tingapi.ting.baidu.com/v1/restserver/ting";
     private static final String METHOD_GET_MUSIC_LIST = "baidu.ting.billboard.billList";
     private static final String METHOD_DOWNLOAD_MUSIC = "baidu.ting.song.play";
@@ -56,10 +70,209 @@ public class HttpClient {
                 .addInterceptor(new HttpInterceptor())
                 .build();
         OkHttpUtils.initClient(okHttpClient);
+
+    }
+
+
+
+    public static void addMusicLike(int userId,long musicId, @NonNull final HttpCallback<String> callback) {
+        OkHttpUtils.postString().url(MUSIC_RUOYI+"/music-like/music-like-manager")
+                .content(new Gson().toJson(new MusicLikeBean.RowsBean(userId, musicId)))
+                .mediaType(MediaType.parse("application/json; charset=utf-8"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        callback.onSuccess(response);
+                        System.out.println(response+"添加喜欢的歌曲");
+                    }
+                });
+    }
+    public static void deleteMusicLike(long userId, long MusicId,@NonNull final HttpCallback<String> callback) {
+        OkHttpUtils.get().url(MUSIC_RUOYI+"/music-like/music-like-manager/delete")
+                .addParams("userId", String.valueOf(userId))
+                .addParams("MusicId", String.valueOf(MusicId))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        callback.onSuccess(response);
+                        System.out.println(response+"删除喜欢的歌曲");
+                    }
+                });
+    }
+
+    public static void addMusicListLike(int userId,long musicListId, @NonNull final HttpCallback<String> callback) {
+        OkHttpUtils.postString().url(MUSIC_RUOYI+"/music_list_like/music_list_like_manager")
+                .content(new Gson().toJson(new MusicListLikeBean.RowsBean(musicListId, userId)))
+                .mediaType(MediaType.parse("application/json; charset=utf-8"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        callback.onSuccess(response);
+                        System.out.println(response+"添加喜欢的歌曲");
+                    }
+                });
+    }
+
+    //添加用户
+    public static void addUser(String phone,String password, @NonNull final HttpCallback<String> callback) {
+        OkHttpUtils.postString().url(MUSIC_RUOYI+"/user/user_manage")
+                .content(new Gson().toJson(new LoginBean.RowsBean(phone, password)))
+                .mediaType(MediaType.parse("application/json; charset=utf-8"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        callback.onSuccess(response);
+                        System.out.println(response+"添加喜欢的歌曲");
+                    }
+                });
+    }
+
+
+    public static void changeInformation(UserInformationBean.RowsBean userInformationBean, @NonNull final HttpCallback<String> callback) {
+        Gson  gson = new Gson();
+        String personJson = gson.toJson(userInformationBean);
+        OkHttpUtils.put().url(MUSIC_RUOYI+"/information/information_manage")
+                .requestBody(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), personJson))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        callback.onSuccess(response);
+                        System.out.println(response+"修改用户信息");
+                    }
+                });
+    }
+
+    public static void deleteMusicListLike(long userMusiclistLikeId,@NonNull final HttpCallback<String> callback) {
+        OkHttpUtils.get().url(MUSIC_RUOYI+"/music_list_like/music_list_like_manager/delete")
+                .addParams("userMusiclistLikeId", String.valueOf(userMusiclistLikeId))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        callback.onSuccess(response);
+                        System.out.println(response+"删除喜欢的歌单");
+                    }
+                });
+    }
+
+    public static void getIsExistUser(String phone,String password,@NonNull final HttpCallback<MusicLikeBean> callback) {
+        OkHttpUtils.get().url(MUSIC_RUOYI+"/user/user_manage/list")
+                .addParams("phone", phone)
+                .addParams("password", password)
+                .build()
+                .execute(new JsonCallback<MusicLikeBean>(MusicLikeBean.class) {
+                    @Override
+                    public void onResponse(MusicLikeBean response, int id) {
+                        callback.onSuccess(response);
+                    }
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void getMusicLike(String userId,@NonNull final HttpCallback<MusicLikeBean> callback) {
+        OkHttpUtils.get().url(MUSIC_RUOYI+"/music-like/music-like-manager/list")
+                .addParams("userId", userId)
+                .build()
+                .execute(new JsonCallback<MusicLikeBean>(MusicLikeBean.class) {
+                    @Override
+                    public void onResponse(MusicLikeBean response, int id) {
+                        callback.onSuccess(response);
+                    }
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void getInformation(String userId,@NonNull final HttpCallback<UserInformationBean> callback) {
+        OkHttpUtils.get().url(MUSIC_RUOYI+"/information/information_manage/list")
+                .addParams("userId", userId)
+                .build()
+                .execute(new JsonCallback<UserInformationBean>(UserInformationBean.class) {
+                    @Override
+                    public void onResponse(UserInformationBean response, int id) {
+                        callback.onSuccess(response);
+                    }
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+
+    public static void getMusicLikeList(String userId,@NonNull final HttpCallback<MusicListLikeBean> callback) {
+        OkHttpUtils.get().url(MUSIC_RUOYI+"/music_list_like/music_list_like_manager/list")
+                .addParams("userId", userId)
+                .build()
+                .execute(new JsonCallback<MusicListLikeBean>(MusicListLikeBean.class) {
+                    @Override
+                    public void onResponse(MusicListLikeBean response, int id) {
+                        callback.onSuccess(response);
+                    }
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
     }
 
     public static void getSplash(@NonNull final HttpCallback<Splash> callback) {
-        OkHttpUtils.get().url(SPLASH_URL).build()
+        OkHttpUtils.get().url(SPLASH_URL)
+                .build()
                 .execute(new JsonCallback<Splash>(Splash.class) {
                     @Override
                     public void onResponse(Splash response, int id) {

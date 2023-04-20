@@ -13,17 +13,15 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import cjk.design.music.Data.MusicData;
-import cjk.design.music.R;
 import cjk.design.music.activity.MusicPlayActivity;
-import cjk.design.music.adapter.MusicListRecycleAdapter;
-import cjk.design.music.databinding.ActivityRecommendationSecondBinding;
+import cjk.design.music.adapter.MusicRecycleAdapter;
 import cjk.design.music.databinding.ActivityRecommendationThirdBinding;
 
 public class RecommendationThirdActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private ActivityRecommendationThirdBinding binding;
-    private MusicListRecycleAdapter adapter;
+    private MusicRecycleAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +59,8 @@ public class RecommendationThirdActivity extends AppCompatActivity {
         sStr.setSpan(new AbsoluteSizeSpan(25, true),6,sStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.recommendationThirdCollapsingToolbar.setTitle(sStr);
         MusicData musicData  = new MusicData();
-        adapter = new MusicListRecycleAdapter(this,musicData.musicList,3);
-        adapter.setOnItemListener(new MusicListRecycleAdapter.ItemListener() {
+        adapter = new MusicRecycleAdapter(this,musicData.musicList,3);
+        adapter.setOnItemListener(new MusicRecycleAdapter.ItemListener() {
             @Override
             public void ItemOnClick(int position) {
                 Intent intent = new Intent(RecommendationThirdActivity.this, MusicPlayActivity.class);

@@ -71,7 +71,7 @@ public class AlbumCoverView extends View implements ValueAnimator.AnimatorUpdate
     }
 
     Uri setDataSourceuri = Uri.parse("android.resource://cjk.design.music/"+ R.raw.yanyuan_xuezhiqian);
-    Music music = new Music((long)1,1,01,"演员","薛之谦","热血专辑",01,"http://p2.music.126.net/oS3ZLQ66uGPMnnOJDzDlBw==/19093019417022416.png",344000,setDataSourceuri.toString(),null,100,null);
+    Music music = new Music((long)1,1,01,"演员","薛之谦","热血专辑",01,"http://p2.music.126.net/oS3ZLQ66uGPMnnOJDzDlBw==/19093019417022416.png",344000,setDataSourceuri.toString(),null,100,1,null);
 
     private void init() {
         mTopLine = getResources().getDrawable(R.drawable.play_page_cover_top_line_shape);

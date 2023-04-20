@@ -1,13 +1,17 @@
 package cjk.design.music.activity.ui.home;
 
 import android.animation.ArgbEvaluator;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
@@ -16,12 +20,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.xiaoyouProject.searchbox.SearchFragment;
 import com.xiaoyouProject.searchbox.custom.IOnSearchClickListener;
 
@@ -34,6 +40,7 @@ import cjk.design.music.activity.Recommendation.RecommendationFirstActivity;
 import cjk.design.music.activity.Recommendation.RecommendationSecondActivity;
 import cjk.design.music.activity.Recommendation.RecommendationThirdActivity;
 import cjk.design.music.activity.SearchMusicActivity;
+import cjk.design.music.activity.login.LoginActivity;
 import cjk.design.music.databinding.FragmentHomeBinding;
 
 
@@ -100,9 +107,33 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
 
+
+
     private void initClick(){
         imageButton.setOnClickListener(this);
         binding.homeNestTab.setOnClickListener(this);
+        binding.homeNavView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.quitLogin:
+                        AlertDialog.Builder alertdialogbuilder = new AlertDialog.Builder(getContext());
+                        alertdialogbuilder.setMessage("是否确定退出当前账户");
+                        alertdialogbuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getActivity(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+
+                            }
+                        });
+                        alertdialogbuilder.setNeutralButton("取消", null);
+                        final AlertDialog alertdialog1 = alertdialogbuilder.create();
+                        alertdialog1.show();
+                }
+                return false;
+            }
+        });
 
         searchFragment.setOnSearchClickListener(new IOnSearchClickListener<String>() {
             /**

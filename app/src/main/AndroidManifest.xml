@@ -38,13 +38,15 @@
         <!-- </activity> -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileProvider"
+            android:authorities="cjk.design.music.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -69,7 +71,7 @@
         </receiver>
 
         <activity
-            android:name=".activity.HomeActivity"
+            android:name=".activity.login.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -78,7 +80,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.HomeActivity"></activity>
+        <activity android:name=".activity.signup.SignUpActivity"></activity>
+        <activity android:name=".activity.signup.SignUpCodeActivity"></activity>
+        <activity android:name=".activity.signup.SignUpPasswordActivity"></activity>
+        <activity android:name=".activity.ui.personal_information.PersonInfoActivity"></activity>
         <activity android:name=".activity.PlayList.PlayListActivity"></activity>
+        <activity android:name=".activity.ui.personal_information.PlayLikeListActivity"></activity>
         <activity android:name=".activity.StartActivity" />
         <activity android:name=".activity.MusicPlayActivity" />
         <activity android:name=".activity.Recommendation.RecommendationFirstActivity" />

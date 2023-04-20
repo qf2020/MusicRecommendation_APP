@@ -49,14 +49,22 @@ public class Music implements Serializable {
 
 
 
+    private int isLove;
+
+
+
+    private int curIsLove;
+
+
     private String lrc;
 
     public Music() {
     }
-    @Generated(hash = 597927762)
+    @Generated(hash = 623711464)
     public Music(Long id, int type, long songId, String title, String artist,
             String album, long albumId, String coverPath, long duration,
-            @NotNull String path, String fileName, long fileSize, String lrc) {
+            @NotNull String path, String fileName, long fileSize, int isLove,
+            int curIsLove, String lrc) {
         this.id = id;
         this.type = type;
         this.songId = songId;
@@ -69,9 +77,28 @@ public class Music implements Serializable {
         this.path = path;
         this.fileName = fileName;
         this.fileSize = fileSize;
+        this.isLove = isLove;
+        this.curIsLove = curIsLove;
         this.lrc = lrc;
     }
-
+    public Music(Long id, int type, long songId, String title, String artist,
+                 String album, long albumId, String coverPath, long duration,
+                 @NotNull String path, String fileName, long fileSize, int isLove, String lrc) {
+        this.id = id;
+        this.type = type;
+        this.songId = songId;
+        this.title = title;
+        this.artist = artist;
+        this.album = album;
+        this.albumId = albumId;
+        this.coverPath = coverPath;
+        this.duration = duration;
+        this.path = path;
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.isLove = isLove;
+        this.lrc = lrc;
+    }
     public interface Type {
         int LOCAL = 0;
         int ONLINE = 1;
@@ -93,6 +120,20 @@ public class Music implements Serializable {
             return true;
         }
         return false;
+    }
+    public int getCurIsLove() {
+        return curIsLove;
+    }
+
+    public void setCurIsLove(int curIsLove) {
+        this.curIsLove = curIsLove;
+    }
+    public int getIsLove() {
+        return isLove;
+    }
+
+    public void setIsLove(int isLove) {
+        this.isLove = isLove;
     }
 
     public String getLrc() {
