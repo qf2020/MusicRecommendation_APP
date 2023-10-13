@@ -11,11 +11,14 @@ import android.os.Bundle;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.PluralsRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavArgument;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -31,17 +34,28 @@ import com.google.android.material.navigation.NavigationView;
 import com.xiaoyouProject.searchbox.SearchFragment;
 import com.xiaoyouProject.searchbox.custom.IOnSearchClickListener;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cjk.design.music.R;
 import cjk.design.music.ScrollPicker.bean.ImageContent;
+import cjk.design.music.activity.PlayList.PlayListActivity;
 import cjk.design.music.activity.Recommendation.RecommendationFirstActivity;
 import cjk.design.music.activity.Recommendation.RecommendationSecondActivity;
 import cjk.design.music.activity.Recommendation.RecommendationThirdActivity;
 import cjk.design.music.activity.SearchMusicActivity;
 import cjk.design.music.activity.login.LoginActivity;
+import cjk.design.music.activity.newMusic.NewMusicFirstActivity;
+import cjk.design.music.activity.newMusic.NewMusicSecondActivity;
+import cjk.design.music.activity.newMusic.NewMusicThirdActivity;
+import cjk.design.music.activity.ui.personal_information.UserInformationBean;
 import cjk.design.music.databinding.FragmentHomeBinding;
+import cjk.design.music.http.HttpCallback;
+import cjk.design.music.http.HttpClient;
+import cjk.design.music.model.DownloadInfo1;
+import cjk.design.music.onLineMusicBean.RankMusciBean;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
@@ -49,11 +63,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private FragmentHomeBinding binding;
     public static final int FRAGMENT_COUNT = 4;
     private ImageView mBackImageView;
-    private TextView mTitleView;
+    private TextView mTitleView ,headText;
     private ImageButton imageButton;
     private LinearLayoutManager linearLayoutManager;//布局管理器
     private HomeRecycleViewAdapter recycleviewAdapter;//适配器
     SearchFragment<String> searchFragment;
+    private int userId;
+    private String userIdRec;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -64,8 +80,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(HomeViewModel.class);
         //viewModel主要的作用是保持数据长久存在，可以在后续开发中思考使用
 
+
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+
+        Map<String, NavArgument> map = NavHostFragment.findNavController(this).getGraph().getArguments();
+        NavArgument navArgument = map.get("userId");
+        userId = (int) navArgument.getDefaultValue();
+        NavArgument navArgument1 = map.get("userIdRec");
+        userIdRec = (String) navArgument1.getDefaultValue();
 
 
 
@@ -113,6 +137,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private void initClick(){
         imageButton.setOnClickListener(this);
         binding.homeNestTab.setOnClickListener(this);
+        headText = binding.homeNavView.getHeaderView(0).findViewById(R.id.username);
+        HttpClient.getInformation(String.valueOf(userId),new HttpCallback<UserInformationBean>() {
+            @Override
+            public void onSuccess(UserInformationBean userInformationBean) {
+                if (userInformationBean == null || userInformationBean.getRows() == null) {
+                    onFail(null);
+                    return;
+                }
+                headText.setText(userInformationBean.getRows().get(0).getUserName());
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                System.out.println(e);
+            }
+        });
         binding.homeNavView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -123,6 +163,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         alertdialogbuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserHas", Activity.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt("key",-1);
+                                editor.commit();
+
                                 Intent intent = new Intent(getActivity(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
 
@@ -131,6 +176,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         alertdialogbuilder.setNeutralButton("取消", null);
                         final AlertDialog alertdialog1 = alertdialogbuilder.create();
                         alertdialog1.show();
+
                 }
                 return false;
             }
@@ -205,7 +251,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         list_music_list.add(new ImageContent("",getResources().getDrawable(R.drawable.music_list_2)));
         list_music_list.add(new ImageContent("",getResources().getDrawable(R.drawable.music_list_3)));
         sDatas.add(list_music_list);
-        sDatas.add(list_music_list);
+        List<ImageContent> Rank = new ArrayList<ImageContent>();
+        Rank.add(new ImageContent("",getResources().getDrawable(R.drawable.quick_music)));
+        Rank.add(new ImageContent("",getResources().getDrawable(R.drawable.new_music)));
+        Rank.add(new ImageContent("",getResources().getDrawable(R.drawable.yuan_music)));
+        sDatas.add(Rank);
 
         linearLayoutManager = new LinearLayoutManager(getContext());//初始化布局管理器
         binding.slRecycle.setLayoutManager(linearLayoutManager);//设置布局管理器
@@ -218,23 +268,89 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     case 0 :
                         //这里是调用推荐歌单的
                         if (ScrollPosition == 0){
+
                             Intent intent = new Intent(getActivity(), RecommendationFirstActivity.class);
+                            intent.putExtra("userId",userId);
+                            intent.putExtra("userIdRec",userIdRec);
                             startActivity(intent);
                             //这里是美好的约会
                         }else if(ScrollPosition == 1){
                             Intent intent = new Intent(getActivity(), RecommendationSecondActivity.class);
+                            intent.putExtra("userId",userId);
                             startActivity(intent);
                         }else{
                             Intent intent = new Intent(getActivity(), RecommendationThirdActivity.class);
+                            intent.putExtra("userId",userId);
                             startActivity(intent);
                         }
 
                         break;
                     case 1:
-                        //这里是新歌速递
+                        if (ScrollPosition == 0){
+
+                            Intent intent = new Intent(getActivity(), NewMusicFirstActivity.class);
+                            intent.putExtra("userId",userId);
+                            startActivity(intent);
+                            //这里是美好的约会
+                        }else if(ScrollPosition == 1){
+                            Intent intent = new Intent(getActivity(), NewMusicSecondActivity.class);
+                            intent.putExtra("userId",userId);
+
+                            startActivity(intent);
+                        }else{
+                            Intent intent = new Intent(getActivity(), NewMusicThirdActivity.class);
+                            intent.putExtra("userId",userId);
+                            startActivity(intent);
+                        }
                         break;
                     case 2:
-                        //这里是排行榜
+                        HttpClient.getRank( new HttpCallback<RankMusciBean>() {
+                            @Override
+                            public void onSuccess(RankMusciBean response) {
+                                if (response == null || response.getList() == null) {
+                                    onFail(null);
+                                    return;
+                                }
+                                if (ScrollPosition == 0){
+                                    //跳转到飙升榜
+                                    Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                                    intent.putExtra("playListId",String.valueOf(response.getList().get(0).getId()));
+                                    intent.putExtra("playListCover",response.getList().get(0).getCoverImgUrl());
+                                    intent.putExtra("playListName",response.getList().get(0).getName());
+                                    intent.putExtra("playListDescription",response.getList().get(0).getDescription());
+                                    intent.putExtra("isLove",3);
+                                    intent.putExtra("userId",userId);
+                                    startActivity(intent);
+
+                                }else if(ScrollPosition == 1){
+                                    //跳转到新歌榜
+                                    Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                                    intent.putExtra("playListId",String.valueOf(response.getList().get(1).getId()));
+                                    intent.putExtra("playListCover",response.getList().get(1).getCoverImgUrl());
+                                    intent.putExtra("playListName",response.getList().get(1).getName());
+                                    intent.putExtra("playListDescription",response.getList().get(1).getDescription());
+                                    intent.putExtra("isLove",3);
+                                    intent.putExtra("userId",userId);
+                                    startActivity(intent);
+                                }else{
+                                    //跳转到原创榜
+                                    Intent intent = new Intent(getActivity(), PlayListActivity.class);
+                                    intent.putExtra("playListId",String.valueOf(response.getList().get(2).getId()));
+                                    intent.putExtra("playListCover",response.getList().get(2).getCoverImgUrl());
+                                    intent.putExtra("playListName",response.getList().get(2).getName());
+                                    intent.putExtra("playListDescription",response.getList().get(2).getDescription());
+                                    intent.putExtra("isLove",3);
+                                    intent.putExtra("userId",userId);
+                                    startActivity(intent);
+                                }
+
+                            }
+
+                            @Override
+                            public void onFail(Exception e) {
+                            }
+                        });
+
                         break;
                     default:
                         break;

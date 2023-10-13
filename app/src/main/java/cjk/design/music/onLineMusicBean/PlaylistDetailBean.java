@@ -181,7 +181,7 @@ public class PlaylistDetailBean {
         private int privacy;
         private long trackUpdateTime;
         private String commentThreadId;
-        private int playCount;
+        private String playCount;
         private long trackNumberUpdateTime;
         private int subscribedCount;
         private int cloudTrackCount;
@@ -359,11 +359,11 @@ public class PlaylistDetailBean {
             this.commentThreadId = commentThreadId;
         }
 
-        public int getPlayCount() {
+        public String getPlayCount() {
             return playCount;
         }
 
-        public void setPlayCount(int playCount) {
+        public void setPlayCount(String playCount) {
             this.playCount = playCount;
         }
 

@@ -21,7 +21,6 @@ import cjk.design.music.utils.ScreenUtils;
 import cjk.design.music.utils.ToastUtils;
 
 /**
- * Created by hzwangchenyan on 2016/11/23.
  */
 public class AppCache {
     private Context mContext;

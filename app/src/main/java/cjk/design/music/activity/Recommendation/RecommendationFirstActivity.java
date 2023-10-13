@@ -5,17 +5,36 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cjk.design.music.Data.MusicData;
+import cjk.design.music.R;
 import cjk.design.music.activity.MusicPlayActivity;
+import cjk.design.music.activity.ui.personal_information.MusicLikeBean;
+import cjk.design.music.activity.ui.personal_information.MusicLikeData;
+import cjk.design.music.activity.ui.personal_information.PlayLikeListActivity;
 import cjk.design.music.adapter.MusicRecycleAdapter;
 import cjk.design.music.databinding.ActivityRecommendationFirstBinding;
+import cjk.design.music.executor.PlaySearchedMusic;
+import cjk.design.music.http.HttpCallback;
+import cjk.design.music.http.HttpClient;
+import cjk.design.music.model.Music;
+import cjk.design.music.onLineMusicBean.RecommendationMusicBean;
+import cjk.design.music.onLineMusicBean.SongInfoBean;
+import cjk.design.music.service.AudioPlayer;
+import cjk.design.music.utils.ToastUtils;
 
 public class RecommendationFirstActivity extends AppCompatActivity {
 
@@ -23,19 +42,49 @@ public class RecommendationFirstActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private ActivityRecommendationFirstBinding binding;
     private MusicRecycleAdapter adapter;
+    private List<Music> list = new ArrayList<>();
+    private int userId;
+    private String userIdRec;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //标题折叠状态下，无法设置maxlines。（目前来看改不了了）
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.base1));
+        //标题折叠状态下，无法设置
+        // maxlines。（目前来看改不了了）
         //未完成数据填充和界面按键响应事件
         super.onCreate(savedInstanceState);
         binding = ActivityRecommendationFirstBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Intent intent = getIntent();
+        userId = intent.getIntExtra("userId",0);
+        userIdRec = intent.getStringExtra("userIdRec");
 
+        binding.refreshRec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                list.clear();
+                binding.refreshRec.start();
+                HttpClient.setRecommendation(String.valueOf(userId),userIdRec,new HttpCallback<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        initDate(0);
+                    }
 
-        initDate();
-        initView();
+                    @Override
+                    public void onFail(Exception e) {
+                        System.out.println(e);
+                    }
+                });
+
+            }
+        });
+
+        initDate(1);
+
     }
 
 
@@ -45,11 +94,86 @@ public class RecommendationFirstActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void initDate(){
+    private void initDate(int check){
+        HttpClient.getRecommendation(String.valueOf(userId),new HttpCallback<RecommendationMusicBean>() {
+            @Override
+            public void onSuccess(RecommendationMusicBean recommendationMusicBean) {
+                if (recommendationMusicBean == null || recommendationMusicBean.getRows() == null) {
+                    onFail(null);
+                    return;
+
+                }
+                HttpClient.getMusicLike(String.valueOf(userId),new HttpCallback<MusicLikeBean>() {
+                    @Override
+                    public void onSuccess(MusicLikeBean playlistBean) {
+                        if (playlistBean == null || playlistBean.getRows() == null) {
+                            onFail(null);
+                            return;
+
+                        }
+                        for (int i =0;i<recommendationMusicBean.getRows().size();i++){
+                            String musicId = String.valueOf(recommendationMusicBean.getRows().get(i).getMusicId());
+                            HttpClient.getMusicCover(musicId, new HttpCallback<SongInfoBean>() {
+                                @Override
+                                public void onSuccess(SongInfoBean songInfoBean) {
+                                    if (songInfoBean == null || songInfoBean.getSongs().size() == 0) {
+                                        onFail(null);
+                                        return;
+                                    }
+                                    Music music = new Music();
+                                    music.setCoverPath(songInfoBean.getSongs().get(0).getAl().getPicUrl());
+                                    music.setSongId(songInfoBean.getSongs().get(0).getId());
+                                    music.setArtist(songInfoBean.getSongs().get(0).getAr().get(0).getName());
+                                    music.setTitle(songInfoBean.getSongs().get(0).getName());
+                                    music.setType(Music.Type.ONLINE);
+                                    for(int j = 0;j<playlistBean.getRows().size();j++){
+                                        if(playlistBean.getRows().get(j).getMusicId()==music.getSongId()){
+                                            music.setIsLove(1);
+                                            music.setCurIsLove(1);
+                                        }
+                                    }
+                                    list.add(music);
+                                }
+
+                                @Override
+                                public void onFail(Exception e) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFail(Exception e) {
+                        System.out.println(e);
+                    }
+                });
+
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        initView(check);
+                    }
+                }, 2000);
+
+
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                System.out.println(e);
+            }
+        });
     }
 
-    private void initView() {
-
+    private void initView(int book) {
+        if (book == 0){
+            adapter.notifyDataSetChanged(list);
+            binding.refreshRec.stop();
+            return;
+        }
 
         //显示返回按钮
         //CollapsingToolbarLayout  :可滚动toorbar
@@ -59,15 +183,45 @@ public class RecommendationFirstActivity extends AppCompatActivity {
         SpannableString sStr = new SpannableString("美好的约会!"+'\n'+"  乘着明媚阳光，不插电好歌伴你轻松一夏.");
         sStr.setSpan(new AbsoluteSizeSpan(25, true),6,sStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.recommendationFirstCollapsingToolbar.setTitle(sStr);
-        MusicData musicData  = new MusicData();
-        adapter = new MusicRecycleAdapter(this,musicData.musicList,1);
+        adapter = new MusicRecycleAdapter(this,list,1);
         adapter.setOnItemListener(new MusicRecycleAdapter.ItemListener() {
             @Override
             public void ItemOnClick(int position) {
-                Intent intent = new Intent(RecommendationFirstActivity.this, MusicPlayActivity.class);
-                startActivity(intent);
+                new PlaySearchedMusic(RecommendationFirstActivity.this, list.get(position)) {
+                    @Override
+                    public void onPrepare() {
+                    }
+
+                    @Override
+                    public void onExecuteSuccess(Music music) {
+
+                        AudioPlayer.get().addAndPlay(music);
+                        ToastUtils.show("已添加到播放列表");
+                        Intent intent = new Intent(RecommendationFirstActivity.this, MusicPlayActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onExecuteFail(Exception e) {
+
+                        ToastUtils.show(R.string.unable_to_play);
+                    }
+                }.execute();
+
+
             }
         });
+        adapter.setOnLoveListener(new MusicRecycleAdapter.LoveListener() {
+            @Override
+            public void ItemOnClick(String tag,int position) {
+                if (tag.equals("selected")){
+                    list.get(position).setCurIsLove(1);
+                }else if(tag.equals("unselected")){
+                    list.get(position).setCurIsLove(0);
+                }
+            }
+        });
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         binding.recommendationFirstRecycle.setLayoutManager(manager);
         binding.recommendationFirstRecycle.setAdapter(adapter);
@@ -94,6 +248,36 @@ public class RecommendationFirstActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+
+            for (int i = 0;i<list.size();i++){
+                if (list.get(i).getCurIsLove()==1 && list.get(i).getIsLove()!=1){
+                    HttpClient.addMusicLike(userId, list.get(i).getSongId(), new HttpCallback<String>() {
+                        @Override
+                        public void onSuccess(String s) {
+                            System.out.println("调用音乐添加成功！！！");
+                        }
+                        @Override
+                        public void onFail(Exception e) {
+
+                        }
+                    });
+                }
+                if(list.get(i).getCurIsLove()==0 && list.get(i).getIsLove()==1){
+                    System.out.println("cur"+list.get(i).getCurIsLove()+"isLove"+list.get(i).getIsLove());
+                    HttpClient.deleteMusicLike(userId,list.get(i).getSongId(), new HttpCallback<String>() {
+                        @Override
+                        public void onSuccess(String s) {
+                            System.out.println("调用音乐删除成功！！！");
+                        }
+                        @Override
+                        public void onFail(Exception e) {
+
+                        }
+                    });
+                }
+            }
+
+
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
 

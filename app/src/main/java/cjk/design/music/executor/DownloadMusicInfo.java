@@ -1,7 +1,6 @@
 package cjk.design.music.executor;
 
 /**
- * Created by hzwangchenyan on 2017/8/11.
  */
 public class DownloadMusicInfo {
     private String title;

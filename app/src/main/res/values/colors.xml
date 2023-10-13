@@ -25,4 +25,10 @@
     <color name="colorAccent">#7e7e7e</color>
     <color name="red0">#ff0000</color>
     <color name="blue0">#576B95</color>
+    <color name="base1">#6D44B5</color>
+    <color name="base2">#26A69A</color>
+    <color name="base3">#5E35B1</color>
+    <color name="new1">#9DAEA6</color>
+    <color name="new2">#ECC9DA</color>
+    <color name="new3">#FED33C</color>
 </resources>

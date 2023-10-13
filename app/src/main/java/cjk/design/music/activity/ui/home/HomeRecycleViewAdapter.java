@@ -35,10 +35,10 @@ public class HomeRecycleViewAdapter extends RecyclerView.Adapter<HomeRecycleView
         sDatas.addAll(Data2);
         height.add(840);
         height.add(700);
-        height.add(700);
+        height.add(630);
         width.add(768);
         width.add(640);
-        width.add(640);
+        width.add(576);
     }
 
     @NonNull

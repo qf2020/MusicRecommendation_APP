@@ -4,6 +4,8 @@
     android:id="@+id/start_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
     >
 
     <ImageView
@@ -37,13 +39,19 @@
         android:layout_marginTop="293dp"
         android:src="@drawable/ic_start_mid">
     </ImageView>
-    <ImageButton
+    <TextView
+        android:id="@+id/enter_login"
         android:layout_width="235dp"
         android:layout_height="48dp"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="617dp"
-        android:src="@drawable/enter_bar_shape"
+        android:text="进入首页"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:background="@drawable/enter_bar_shape"
         >
 
-    </ImageButton>
+    </TextView>
 </RelativeLayout>

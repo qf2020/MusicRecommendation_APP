@@ -2,7 +2,6 @@ package cjk.design.music.constants;
 
 /**
  * Extras
- * Created by hzwangchenyan on 2015/12/25.
  */
 public interface Extras {
     String EXTRA_NOTIFICATION = "cjk.design.music.notification";

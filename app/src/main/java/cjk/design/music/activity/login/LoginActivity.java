@@ -34,6 +34,7 @@ import java.util.List;
 
 import cjk.design.music.R;
 import cjk.design.music.activity.HomeActivity;
+import cjk.design.music.activity.forget.ForgetActivity;
 import cjk.design.music.activity.signup.SignUpActivity;
 import cjk.design.music.activity.ui.personal_information.MusicLikeBean;
 import cjk.design.music.databinding.ActivityMainLoginBinding;
@@ -41,6 +42,7 @@ import cjk.design.music.databinding.ActivityMyInfoBinding;
 import cjk.design.music.http.HttpCallback;
 import cjk.design.music.http.HttpClient;
 import cjk.design.music.model.Music;
+import cjk.design.music.utils.ToastUtils;
 
 /**
  * @description 登录活动
@@ -59,7 +61,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     private LinearLayout accordLayout;
 
-    private TextView /*patient,family,doctor,*/error;
+    private TextView error;
 
     private CountDownView loginMessage;
 
@@ -103,19 +105,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         binding = ActivityMainLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        SharedPreferences sharedPreferences = getSharedPreferences("CountUser", MODE_PRIVATE);
-        if (sharedPreferences.getInt("key",-1) != -1) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserHas", MODE_PRIVATE);
+        if (sharedPreferences.getInt("key",-1) == 1) {
             Intent inte = new Intent(LoginActivity.this, HomeActivity.class);
-
-            SharedPreferences sharedPreferences1 = getSharedPreferences("user"+sharedPreferences.getInt("key",-1), MODE_PRIVATE);
-
             inte.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-            System.out.println("已有账户身份"+sharedPreferences1.getString("userPhone","")+" "+sharedPreferences.getInt("key",-1));
-            inte.putExtra("userid",sharedPreferences1.getInt("userid",0));
-            inte.putExtra("Id",sharedPreferences1.getInt("Id",0));
-            inte.putExtra("userRole",sharedPreferences1.getInt("userRole",0));
-            inte.putExtra("userPhone",sharedPreferences1.getString("userPhone",""));
-            System.out.println(sharedPreferences1.getInt("userid",0)+" "+sharedPreferences1.getInt("Id",0)+" "+sharedPreferences1.getInt("userRole",0));
+            inte.putExtra("userId",sharedPreferences.getInt("userId",0));
+            inte.putExtra("userIdRec",sharedPreferences.getString("userIdRec",""));
             startActivity(inte);
             finish();
         }
@@ -222,45 +217,45 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 String loginName,loginPaswd;
                 loginName=nameLayout.getText().toString();
                 loginPaswd=passwordLayout.getText().toString();
-                HttpClient.getIsExistUser("1","123",new HttpCallback<LoginBean>() {
+                HttpClient.getIsExistUser(loginName,loginPaswd,new HttpCallback<LoginBean>() {
                     @Override
                     public void onSuccess(LoginBean loginBean) {
                         if (loginBean == null) {
                             onFail(null);
                             return;
                         }
-                        //这边写成功的语句
+                        if(loginBean.getRows().size()==1){
+                            SharedPreferences sharedPreferences = getSharedPreferences("UserHas", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("userId",loginBean.getRows().get(0).getUserId());
+                            editor.putString("userIdRec",loginBean.getRows().get(0).getUserIdRec());
+                            editor.putInt("key",1);
+                            editor.commit();
+
+
+                            Intent inte = new Intent(LoginActivity.this, HomeActivity.class);
+                            inte.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            inte.putExtra("userId",loginBean.getRows().get(0).getUserId());
+                            inte.putExtra("userIdRec",loginBean.getRows().get(0).getUserIdRec());
+                            error.setText(null);
+                            startActivity(inte);
+                            finish();
+
+                        }
+                        else if(loginName.isEmpty()){
+                            error.setText("电话号码不能为空");
+                        }
+                        else{
+                            error.setText("账号与密码不匹配");
+                        }
                     }
 
                     @Override
                     public void onFail(Exception e) {
-                        //这边写失败的语句
+                        ToastUtils.show("网络错误");
                     }
                 });
-                if(true){
-                    int identData[] = new int[5];
-                    SharedPreferences sharedPreferences = getSharedPreferences("CountUser", MODE_PRIVATE);
-                    SharedPreferences.Editor editor1 = sharedPreferences.edit();
-                    int count = sharedPreferences.getInt("count",0);
-                    for(int i = 0;i<count+1;i++){
-                        SharedPreferences sharedPreferences1 = getSharedPreferences("user"+i, MODE_PRIVATE);
-                        String temp = sharedPreferences1.getString("userPhone","");
 
-                    }
-                    if(true){
-                        Intent inte = new Intent(LoginActivity.this, HomeActivity.class);
-                        inte.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        error.setText(null);
-                        startActivity(inte);
-                        finish();
-                    }
-                }
-                else if(loginName.isEmpty()){
-                    error.setText("电话号码不能为空");
-                }
-                else{
-                    error.setText("账号与密码不匹配");
-                }
 
 
 
@@ -272,12 +267,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 startActivity(inte);
                 break;
             }
-//            case R.id.forget_text:
-//            {
-//                Intent inte = new Intent(LoginActivity.this, ForgetActivity.class);
-//                startActivity(inte);
-//                break;
-//            }
+            case R.id.forget_text:
+            {
+                Intent inte = new Intent(LoginActivity.this, ForgetActivity.class);
+                startActivity(inte);
+                break;
+            }
             case R.id.login_message:
                 loginMessage.start();
             default:

@@ -14,12 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import cjk.design.music.R;
 import cjk.design.music.activity.login.LoginActivity;
 import cjk.design.music.activity.service.RegisterManager;
+import cjk.design.music.http.HttpCallback;
+import cjk.design.music.http.HttpClient;
+import cjk.design.music.utils.ToastUtils;
 
 
 public class SignUpPasswordActivity extends AppCompatActivity implements  View.OnClickListener{
 
-    private final RegisterManager uRegister = new RegisterManager();
-    String sPassEditGet="",sPassEditConfirmGet="";
+    String sPassEditGet="",sPassEditConfirmGet="",sNameEditGet;
     TextView buttonSignUpPass;
     EditText SignUpPass,SignUpPassConfirm;
 
@@ -27,6 +29,11 @@ public class SignUpPasswordActivity extends AppCompatActivity implements  View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_password);
+
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
+        Intent intent = getIntent();
+        sNameEditGet = intent.getStringExtra("Tel");
 
         buttonSignUpPass = findViewById(R.id.sign_up_password_enter);
         SignUpPass = findViewById(R.id.sign_up_passwd);
@@ -109,10 +116,20 @@ public class SignUpPasswordActivity extends AppCompatActivity implements  View.O
                     Toast.makeText(this,"密码输入不一致",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    Toast.makeText(this,"修改成功",Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+
+                    HttpClient.addUser(sNameEditGet, sPassEditConfirmGet, new HttpCallback<String>() {
+                        @Override
+                        public void onSuccess(String s) {
+                            ToastUtils.show("账号注册成功");
+                            Intent intent = new Intent(SignUpPasswordActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                        }
+                        @Override
+                        public void onFail(Exception e) {
+
+                        }
+                    });
+
                 }
                 break;
             }

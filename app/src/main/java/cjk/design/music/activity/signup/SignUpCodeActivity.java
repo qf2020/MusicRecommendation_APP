@@ -27,9 +27,12 @@ public class SignUpCodeActivity extends AppCompatActivity implements  View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_code);
+
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
         Intent intent = getIntent();
         SmsCode = intent.getStringExtra("Code");
-        sNameEditGet = intent.getStringExtra("sNameEditGet");
+        sNameEditGet = intent.getStringExtra("Tel");
 
         btnGetSmsCode = findViewById(R.id.sign_up_btn_get_sms_code_cd);
         btnGetSmsCode.start();
@@ -68,6 +71,7 @@ public class SignUpCodeActivity extends AppCompatActivity implements  View.OnCli
                 }else{
                     Toast.makeText(this,"验证码正确",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(this, SignUpPasswordActivity.class);
+                    intent.putExtra("Tel",sNameEditGet);
                     startActivity(intent);
                     finish();
                 }

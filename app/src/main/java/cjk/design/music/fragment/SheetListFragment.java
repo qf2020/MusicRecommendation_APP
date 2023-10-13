@@ -23,7 +23,6 @@ import cjk.design.music.utils.binding.Bind;
 
 /**
  * 在线音乐
- * Created by wcy on 2015/11/26.
  */
 public class SheetListFragment extends BaseFragment implements AdapterView.OnItemClickListener {
     @Bind(R.id.lv_sheet)

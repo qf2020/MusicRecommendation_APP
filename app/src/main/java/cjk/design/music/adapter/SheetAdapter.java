@@ -23,7 +23,6 @@ import cjk.design.music.utils.binding.ViewBinder;
 
 /**
  * 歌单列表适配器
- * Created by wcy on 2015/12/19.
  */
 public class SheetAdapter extends BaseAdapter {
     private static final int TYPE_PROFILE = 0;

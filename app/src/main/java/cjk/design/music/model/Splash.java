@@ -9,7 +9,7 @@ import java.util.Locale;
 
 /**
  * 启动画面Java bean
- * Created by hzwangchenyan on 2016/3/2.
+
  */
 public class Splash {
     private static final String URL = "http://cn.bing.com%s_720x1280.jpg";

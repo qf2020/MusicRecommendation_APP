@@ -16,7 +16,6 @@ import cjk.design.music.utils.NetworkUtils;
 import cjk.design.music.utils.ToastUtils;
 
 /**
- * Created by hzwangchenyan on 2017/1/20.
  */
 public abstract class DownloadMusic implements IExecutor<Void> {
     private Activity mActivity;

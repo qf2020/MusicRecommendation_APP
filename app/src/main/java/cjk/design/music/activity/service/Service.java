@@ -77,7 +77,7 @@ public class Service
             req.setSmsSdkAppId(sdkAppId);
 
             /* 短信签名内容: 使用 UTF-8 编码，必须填写已审核通过的签名，签名信息可登录 [短信控制台] 查看 */
-            String signName = "IRehab护理宝";
+            String signName = "IRehab享听";
             req.setSignName(signName);
 
 

@@ -12,7 +12,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 /**
- * Created by hzwangchenyan on 2017/8/11.
  */
 public class ID3Tags {
     private static final String FRONT_COVER_DESC = "front_cover";

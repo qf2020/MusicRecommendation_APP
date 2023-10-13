@@ -44,7 +44,6 @@ import cjk.design.music.utils.binding.Bind;
 
 /**
  * 本地音乐列表
- * Created by wcy on 2015/11/26.
  */
 public class LocalMusicFragment extends BaseFragment implements AdapterView.OnItemClickListener, OnMoreClickListener {
     @Bind(R.id.lv_local_music)

@@ -39,6 +39,7 @@ public class PlayListActivity extends BaseActivity implements View.OnClickListen
     private List<Music> list = new ArrayList<>();
     private long likeId;
     private int isLove;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class PlayListActivity extends BaseActivity implements View.OnClickListen
         playListId = intent.getStringExtra("playListId");
         isLove = intent.getIntExtra("isLove",0);
         likeId = intent.getLongExtra("likeId",0);
+        userId = intent.getIntExtra("userId",0);
         initView(intent);
         SearchPlayList(playListId);
 
@@ -63,7 +65,7 @@ public class PlayListActivity extends BaseActivity implements View.OnClickListen
                     return;
                 }
 
-                HttpClient.getMusicLike("1",new HttpCallback<MusicLikeBean>() {
+                HttpClient.getMusicLike(String.valueOf(userId),new HttpCallback<MusicLikeBean>() {
                     @Override
                     public void onSuccess(MusicLikeBean playlistBean) {
                         if (playlistBean == null || playlistBean.getRows() == null) {
@@ -81,6 +83,7 @@ public class PlayListActivity extends BaseActivity implements View.OnClickListen
                             for(int j = 0;j<playlistBean.getRows().size();j++){
                                 if(playlistBean.getRows().get(j).getMusicId()==music.getSongId()){
                                     music.setIsLove(1);
+                                    music.setCurIsLove(1);
                                 }
                             }
                             list.add(music);
@@ -230,7 +233,7 @@ public class PlayListActivity extends BaseActivity implements View.OnClickListen
         if(keyCode == KeyEvent.KEYCODE_BACK){
             for (int i = 0;i<list.size();i++){
                 if (list.get(i).getCurIsLove()==1 && list.get(i).getIsLove()!=1){
-                    HttpClient.addMusicLike(1, list.get(i).getSongId(), new HttpCallback<String>() {
+                    HttpClient.addMusicLike(userId, list.get(i).getSongId(), new HttpCallback<String>() {
                         @Override
                         public void onSuccess(String s) {
                             System.out.println("调用音乐添加成功！！！");
@@ -242,7 +245,8 @@ public class PlayListActivity extends BaseActivity implements View.OnClickListen
                     });
                 }
                 if(list.get(i).getCurIsLove()==0 && list.get(i).getIsLove()==1){
-                    HttpClient.deleteMusicLike(1,list.get(i).getSongId(), new HttpCallback<String>() {
+                    System.out.println("cur"+list.get(i).getCurIsLove()+"isLove"+list.get(i).getIsLove());
+                    HttpClient.deleteMusicLike(userId,list.get(i).getSongId(), new HttpCallback<String>() {
                         @Override
                         public void onSuccess(String s) {
                             System.out.println("调用音乐删除成功！！！");
@@ -268,7 +272,8 @@ public class PlayListActivity extends BaseActivity implements View.OnClickListen
                     }
                 });
             }else if (isLove == 0 && binding.musicListLove.getTag().equals("selected")){
-                HttpClient.addMusicListLike(1, Long.valueOf(playListId), new HttpCallback<String>() {
+
+                HttpClient.addMusicListLike(userId, Long.valueOf(playListId), new HttpCallback<String>() {
                     @Override
                     public void onSuccess(String s) {
                         System.out.println("增加歌单添加成功！！！");

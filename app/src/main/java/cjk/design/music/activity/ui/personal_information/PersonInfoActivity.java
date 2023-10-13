@@ -133,8 +133,7 @@ public class PersonInfoActivity extends AppCompatActivity implements View.OnClic
     private Date date;
     Bitmap bitmap;
     private File takePhotoFile;
-    private int who;
-    private int userRole;
+    private int userId;
     private ActivityMyInfoBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,8 +142,7 @@ public class PersonInfoActivity extends AppCompatActivity implements View.OnClic
         binding = ActivityMyInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Intent intent = getIntent();
-        who = intent.getIntExtra("Id", 0);
-        userRole = intent.getIntExtra("userRole", 0);
+        userId = intent.getIntExtra("userId",0);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
@@ -283,7 +281,7 @@ public class PersonInfoActivity extends AppCompatActivity implements View.OnClic
 //                });
 
                 //initPatientInfo();
-        initData(1);
+        initData(userId);
     }
 
     private void initData(int userID){
@@ -297,7 +295,11 @@ public class PersonInfoActivity extends AppCompatActivity implements View.OnClic
                 }
                 userInformation = userInformationBean;
                 binding.personInfoNameIg.getContentEdt().setText(userInformationBean.getRows().get(0).getUserName());
-                binding.personInfoGenderIg.getContentEdt().setText(userInformationBean.getRows().get(0).getUserSex()==1?"男":"女");
+                if (userInformationBean.getRows().get(0).getUserSex() == 0){
+                    binding.personInfoGenderIg.getContentEdt().setText("未填写");
+                }else{
+                    binding.personInfoGenderIg.getContentEdt().setText(userInformationBean.getRows().get(0).getUserSex()==1?"男":"女");
+                }
                 binding.personInfoRegionIg.getContentEdt().setText(userInformationBean.getRows().get(0).getUserAddress());
                 binding.personInfoBirthdayIg.getContentEdt().setText(userInformationBean.getRows().get(0).getUserBirthday());
                 Glide.with(getApplicationContext()).load(userInformationBean.getRows().get(0).getUserCover())
@@ -802,7 +804,12 @@ public class PersonInfoActivity extends AppCompatActivity implements View.OnClic
                 userInformation.getRows().get(0).setUserName(EditName.getText().toString());
                 userInformation.getRows().get(0).setUserBirthday(EditBirthday.getText().toString());
                 userInformation.getRows().get(0).setUserAddress(EditHome.getText().toString());
-                userInformation.getRows().get(0).setUserSex(EditSex.getText().toString().equals("男")?1:0);
+                if (EditSex.getText().toString().equals("男")){
+                    userInformation.getRows().get(0).setUserSex(1);
+                }else if (EditSex.getText().toString().equals("女")){
+                    userInformation.getRows().get(0).setUserSex(2);
+                }
+
                 //userInformation.getRows().get(0).setUserCover();
 
                 HttpClient.changeInformation(userInformation.getRows().get(0),new HttpCallback<String>() {

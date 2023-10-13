@@ -7,54 +7,51 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import cjk.design.music.R;
+import cjk.design.music.activity.login.LoginActivity;
+import cjk.design.music.databinding.ActivityHomeBinding;
+import cjk.design.music.databinding.ActivityStartBinding;
 
 public class StartActivity extends AppCompatActivity {
 
-    private SharedPreferences mPreferences;
+    private ActivityStartBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 
         SharedPreferences jame = getSharedPreferences("jame", 0);//创建一个文件用来储存app的开启次数状态
         boolean isFirst = jame.getBoolean("isFirst", true);//这个文件里面的布尔常量名，和它的初始状态，状态为是，则触发下面的方法
         if (isFirst) {
             //显示引导页界面
-            setContentView(R.layout.activity_start);
+            binding = ActivityStartBinding.inflate(getLayoutInflater());
+            setContentView(binding.getRoot());
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
             SharedPreferences.Editor edit = jame.edit();//创建状态储存文件
             edit.putBoolean("isFirst", false);//将参数put，改变其状态
             edit.commit();//保证文件的创建和编辑
-            new CountDownTimer(1000, 1000) //这个方法是一个计时器
-            {
+            binding.enterLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onTick(long millisUntilFinished) {
-                }
-
-                @Override
-                public void onFinish() {
-
+                public void onClick(View view) {
                     Intent intent = new Intent();
-                    intent.setClass(StartActivity.this, MusicActivity.class);
+                    intent.setClass(StartActivity.this, LoginActivity.class);
                     startActivity(intent);
-                    //下面的功能实现了引导页的逐渐关闭
-                    int VERSION = Integer.parseInt(android.os.Build.VERSION.SDK);
-//                    if (VERSION >= 5) {
-//                        StartActivity.this.overridePendingTransition(R.anim.alpha_in, R.anim.alpha_out);
-//                    }
                     finish();
                 }
-            }.start();
+            });
         } else {
-            setContentView(R.layout.activity_music);//否则就显示注册界面
+            Intent intent = new Intent();
+            intent.setClass(StartActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 }

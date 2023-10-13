@@ -10,7 +10,6 @@ import cjk.design.music.model.Music;
 import cjk.design.music.utils.CoverLoader;
 
 /**
- * Created by hzwangchenyan on 2017/8/8.
  */
 public class MediaSessionManager {
     private static final String TAG = "MediaSessionManager";

@@ -5,7 +5,7 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#26A69A">
+    android:background="@color/colorWhite">
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/recommendation_second_Coordinator"
         android:layout_width="match_parent"

@@ -71,7 +71,7 @@
         </receiver>
 
         <activity
-            android:name=".activity.login.LoginActivity"
+            android:name=".activity.StartActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -80,6 +80,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.login.LoginActivity"></activity>
+        <activity android:name=".activity.forget.ForgetActivity"></activity>
+        <activity android:name=".activity.forget.ForgetPasswordActivity"></activity>
+        <activity android:name=".activity.forget.ForgetCodeActivity"></activity>
+        <activity android:name=".activity.newMusic.NewMusicFirstActivity"></activity>
+        <activity android:name=".activity.newMusic.NewMusicSecondActivity"></activity>
+        <activity android:name=".activity.newMusic.NewMusicThirdActivity"></activity>
         <activity android:name=".activity.HomeActivity"></activity>
         <activity android:name=".activity.signup.SignUpActivity"></activity>
         <activity android:name=".activity.signup.SignUpCodeActivity"></activity>
@@ -87,16 +94,12 @@
         <activity android:name=".activity.ui.personal_information.PersonInfoActivity"></activity>
         <activity android:name=".activity.PlayList.PlayListActivity"></activity>
         <activity android:name=".activity.ui.personal_information.PlayLikeListActivity"></activity>
-        <activity android:name=".activity.StartActivity" />
         <activity android:name=".activity.MusicPlayActivity" />
         <activity android:name=".activity.Recommendation.RecommendationFirstActivity" />
         <activity android:name=".activity.Recommendation.RecommendationSecondActivity" />
         <activity android:name=".activity.Recommendation.RecommendationThirdActivity" />
         <activity
             android:name=".activity.OnlineMusicActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MusicActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ArtistInfoActivity"
@@ -106,10 +109,6 @@
             android:name=".activity.SearchMusicActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Search" />
-        <activity
-            android:name=".activity.SettingActivity"
-            android:label="@string/menu_setting"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/menu_about"

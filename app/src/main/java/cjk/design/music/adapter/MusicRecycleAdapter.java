@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cjk.design.music.R;
+import cjk.design.music.base.BaseAdapter;
 import cjk.design.music.model.Music;
+import cjk.design.music.onLineMusicBean.PlaylistBean;
 
-public class MusicRecycleAdapter extends RecyclerView.Adapter<MusicRecycleAdapter.MusicViewHolder>{
+public class MusicRecycleAdapter extends BaseAdapter<MusicRecycleAdapter.MusicViewHolder,Music>{
 
     private List<Music> mDatas = new ArrayList<>();
     private Context context;
@@ -32,7 +34,15 @@ public class MusicRecycleAdapter extends RecyclerView.Adapter<MusicRecycleAdapte
     private LoveListener loveListener;
     private int mode;
 
+
+    @Override
+    public void notifyDataSetChanged(List<Music> dataList) {
+        this.mDatas = dataList;
+        notifyDataSetChanged();
+    }
+
     public MusicRecycleAdapter(Context context, List<Music> sDatas, int mode){
+        super(context);
         this.context = context;
         mDatas.addAll(sDatas);
         this.mode = mode;

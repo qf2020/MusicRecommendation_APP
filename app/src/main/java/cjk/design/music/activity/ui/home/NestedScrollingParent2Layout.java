@@ -121,7 +121,7 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
         if (resourceId > 0) {
             height = getResources().getDimensionPixelSize(resourceId);
         }
-        lp.height = getMeasuredHeight() - mNavView.getMeasuredHeight()-height;
+        lp.height = getMeasuredHeight() - mNavView.getMeasuredHeight()-height-(int) getResources().getDimension(R.dimen.test1);
         mViewPager.setLayoutParams(lp);
         //因为ViewPager修改了高度，所以需要重新测量
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);

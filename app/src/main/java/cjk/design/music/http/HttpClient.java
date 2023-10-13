@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import cjk.design.music.activity.login.LoginBean;
+import cjk.design.music.activity.newMusic.NewMusicBean;
 import cjk.design.music.activity.ui.personal_information.MusicLikeBean;
 import cjk.design.music.activity.ui.personal_information.MusicListLikeBean;
 import cjk.design.music.activity.ui.personal_information.UserInformationBean;
@@ -35,19 +36,21 @@ import cjk.design.music.model.Splash;
 import cjk.design.music.onLineMusicBean.MusicLrc;
 import cjk.design.music.onLineMusicBean.PlaylistBean;
 import cjk.design.music.onLineMusicBean.PlaylistDetailBean;
+import cjk.design.music.onLineMusicBean.RankMusciBean;
+import cjk.design.music.onLineMusicBean.RecommendationMusicBean;
 import cjk.design.music.onLineMusicBean.SongInfoBean;
+import cjk.design.music.onLineMusicBean.UserMusicActionBean;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 
 /**
- * Created by hzwangchenyan on 2017/2/8.
  */
 public class HttpClient {
     private static final String SPLASH_URL = "http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1";
-    private static final String ip = "http://192.168.30.92:3000";
-    private static final String MUSIC_RUOYI = "http://192.168.30.92:8080";
+    private static final String ip = "http://192.168.109.92:3000";
+    private static final String MUSIC_RUOYI = "http://192.168.109.92:8080";
     private static final String BASE_URL = "http://tingapi.ting.baidu.com/v1/restserver/ting";
     private static final String METHOD_GET_MUSIC_LIST = "baidu.ting.billboard.billList";
     private static final String METHOD_DOWNLOAD_MUSIC = "baidu.ting.song.play";
@@ -147,6 +150,25 @@ public class HttpClient {
                 });
     }
 
+    public static void addAction(int userId,String musicId,String listenHour,String pointTimes, @NonNull final HttpCallback<String> callback) {
+        OkHttpUtils.postString().url(MUSIC_RUOYI+"/user_music_action/user_music_action_manage/action")
+                .content(new Gson().toJson(new UserMusicActionBean.RowsBean(userId, musicId,listenHour,pointTimes)))
+                .mediaType(MediaType.parse("application/json; charset=utf-8"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        callback.onSuccess(response);
+                        System.out.println(response+"添加时长");
+                    }
+                });
+    }
+
+
 
     public static void changeInformation(UserInformationBean.RowsBean userInformationBean, @NonNull final HttpCallback<String> callback) {
         Gson  gson = new Gson();
@@ -166,6 +188,29 @@ public class HttpClient {
                     }
                 });
     }
+
+
+
+
+    public static void changePassword(LoginBean.RowsBean loginBean , @NonNull final HttpCallback<String> callback) {
+        Gson  gson = new Gson();
+        String personJson = gson.toJson(loginBean);
+        OkHttpUtils.put().url(MUSIC_RUOYI+"/user/user_manage")
+                .requestBody(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), personJson))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        callback.onSuccess(response);
+                        System.out.println(response+"修改用户密码");
+                    }
+                });
+    }
+
 
     public static void deleteMusicListLike(long userMusiclistLikeId,@NonNull final HttpCallback<String> callback) {
         OkHttpUtils.get().url(MUSIC_RUOYI+"/music_list_like/music_list_like_manager/delete")
@@ -226,6 +271,49 @@ public class HttpClient {
                     }
                 });
     }
+    public static void getRecommendation(String userId,@NonNull final HttpCallback<RecommendationMusicBean> callback) {
+        OkHttpUtils.get().url(MUSIC_RUOYI+"/user_recommendation/user_recommendation_manage/list")
+                .addParams("userId", userId)
+                .build()
+                .execute(new JsonCallback<RecommendationMusicBean>(RecommendationMusicBean.class) {
+                    @Override
+                    public void onResponse(RecommendationMusicBean response, int id) {
+                        callback.onSuccess(response);
+                    }
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void setRecommendation(String userId,String userIdRec,@NonNull final HttpCallback<String> callback) {
+        OkHttpUtils.get().url(MUSIC_RUOYI+"/user_recommendation/user_recommendation_manage/setRecommendation")
+                .addParams("userId", userId)
+                .addParams("userIdRec", userIdRec)
+                .build()
+                .execute(new JsonCallback<String>(String.class) {
+                    @Override
+                    public void onResponse(String response, int id) {
+                        callback.onSuccess(response);
+                    }
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
 
     public static void getInformation(String userId,@NonNull final HttpCallback<UserInformationBean> callback) {
         OkHttpUtils.get().url(MUSIC_RUOYI+"/information/information_manage/list")
@@ -369,6 +457,50 @@ public class HttpClient {
                 });
     }
 
+    public static void getNewMusic(String type, @NonNull final HttpCallback<NewMusicBean> callback) {
+        OkHttpUtils.get().url(ip+"/top/song")
+                .addParams("type", type)
+                .build()
+                .execute(new JsonCallback<NewMusicBean>(NewMusicBean.class) {
+                    @Override
+                    public void onResponse(NewMusicBean response, int id) {
+                        callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+
+    public static void getRank(@NonNull final HttpCallback<RankMusciBean> callback) {
+        OkHttpUtils.get().url(ip+"/toplist")
+                .build()
+                .execute(new JsonCallback<RankMusciBean>(RankMusciBean.class) {
+                    @Override
+                    public void onResponse(RankMusciBean response, int id) {
+                        callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
     public static void getMusicCover(String songId, @NonNull final HttpCallback<SongInfoBean> callback) {
         OkHttpUtils.get().url(ip+"/song/detail")
                 .addParams("ids", songId)
@@ -415,7 +547,7 @@ public class HttpClient {
 
     public static void getPlayList( @NonNull final HttpCallback<PlaylistBean> callback) {
         OkHttpUtils.get().url(ip+"/top/playlist")
-                .addParams("limit", "30")
+                .addParams("limit", "48")
                 .build()
                 .execute(new JsonCallback<PlaylistBean>(PlaylistBean.class) {
                     @Override

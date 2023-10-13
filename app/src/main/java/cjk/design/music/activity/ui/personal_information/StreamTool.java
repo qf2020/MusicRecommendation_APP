@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * @author: 86186
- * @date: 2021/12/17
- * @email: 11
  */
 public class StreamTool {
         public static byte[] readInputStream(InputStream inputStream)throws IOException {

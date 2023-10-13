@@ -10,7 +10,6 @@ import cjk.design.music.service.AudioPlayer;
 
 /**
  * 耳机线控，仅在5.0以下有效，5.0以上被{@link MediaSessionCompat}接管。
- * Created by hzwangchenyan on 2016/1/21.
  */
 public class RemoteControlReceiver extends BroadcastReceiver {
 

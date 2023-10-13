@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavArgument;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +26,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cjk.design.music.R;
 import cjk.design.music.activity.PlayList.PlayListActivity;
@@ -42,7 +45,7 @@ public class PersonalInformationFragment extends Fragment {
     private FragmentPersonalInformationBinding binding;
     private RecyclerView recyclerView;
     private List<Integer> delete = new ArrayList<>();
-
+    private int userId;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         PersonalInformationViewModel notificationsViewModel =
@@ -52,7 +55,12 @@ public class PersonalInformationFragment extends Fragment {
         View root = binding.getRoot();
 
         //其中喜欢的歌单里面的recycleview就是调用了list中的组件。
-        initData("1");
+
+        Map<String, NavArgument> map = NavHostFragment.findNavController(this).getGraph().getArguments();
+        NavArgument navArgument = map.get("userId");
+        userId = (int) navArgument.getDefaultValue();
+
+        initData(String.valueOf(userId));
         initView3();
         return root;
     }
@@ -90,6 +98,23 @@ public class PersonalInformationFragment extends Fragment {
                 System.out.println(e);
             }
         });
+
+        HttpClient.getInformation(userId,new HttpCallback<UserInformationBean>() {
+            @Override
+            public void onSuccess(UserInformationBean userInformationBean) {
+                if (userInformationBean == null || userInformationBean.getRows() == null) {
+                    onFail(null);
+                    return;
+                }
+                binding.userInfo.tvName.setText(userInformationBean.getRows().get(0).getUserName());
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                System.out.println(e);
+            }
+        });
+
 
     }
     private void initView2(MusicLikeBean playlistBean){
@@ -178,6 +203,7 @@ public class PersonalInformationFragment extends Fragment {
                         intent.putExtra("playListName",playlistDetailBean.getPlaylist().getName());
                         intent.putExtra("playListDescription",playlistDetailBean.getPlaylist().getDescription());
                         intent.putExtra("likeId",playlistBean.getRows().get(position).getUserMusiclistLikeId());
+                        intent.putExtra("userId",userId);
                         startActivity(intent);
                     }
                     @Override
@@ -197,6 +223,8 @@ public class PersonalInformationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(),PersonInfoActivity.class);
+
+                intent.putExtra("userId",userId);
                 startActivity(intent);
             }
         });

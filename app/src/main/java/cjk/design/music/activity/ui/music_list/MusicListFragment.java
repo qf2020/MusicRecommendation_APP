@@ -11,11 +11,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavArgument;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cjk.design.music.activity.PlayList.PlayListActivity;
 import cjk.design.music.activity.lazy.WowContract;
@@ -41,6 +44,7 @@ public class MusicListFragment extends BaseFragment<WowPresenter> implements Wow
     private static final int TOTAL_LOAD_LINE = 30;
     private int totalPage = 3;
     List<PlaylistBean.PlaylistsBean> list = new ArrayList<>();
+    private int userId;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +53,10 @@ public class MusicListFragment extends BaseFragment<WowPresenter> implements Wow
 
         binding = FragmentMusicListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        Map<String, NavArgument> map = NavHostFragment.findNavController(this).getGraph().getArguments();
+        NavArgument navArgument = map.get("userId");
+        userId = (int) navArgument.getDefaultValue();
 
         //还需美化
         // 懒加载还没实现出来。
@@ -119,7 +127,7 @@ public class MusicListFragment extends BaseFragment<WowPresenter> implements Wow
     private PlayListAdapter.OnPlayListClickListener listener = position -> {
         if (playlist.getPlaylists() != null || !playlist.getPlaylists().isEmpty()){
 
-            HttpClient.getMusicLikeList("1",new HttpCallback<MusicListLikeBean>() {
+            HttpClient.getMusicLikeList(String.valueOf(userId),new HttpCallback<MusicListLikeBean>() {
                 @Override
                 public void onSuccess(MusicListLikeBean playlistBean) {
                     if (playlistBean == null || playlistBean.getRows() == null) {
@@ -133,6 +141,7 @@ public class MusicListFragment extends BaseFragment<WowPresenter> implements Wow
                     intent.putExtra("playListCover",playlist.getPlaylists().get(position+3).getCoverImgUrl());
                     intent.putExtra("playListName",playlist.getPlaylists().get(position+3).getName());
                     intent.putExtra("playListDescription",playlist.getPlaylists().get(position+3).getDescription());
+                    intent.putExtra("userId",userId);
                     for (int i = 0;i<playlistBean.getRows().size();i++){
                         if (playlistBean.getRows().get(i).getMusicListId() == playlist.getPlaylists().get(position+3).getId()){
                             intent.putExtra("isLove",1);
@@ -173,6 +182,7 @@ public class MusicListFragment extends BaseFragment<WowPresenter> implements Wow
             intent.putExtra("playListName",playlist.getPlaylists().get(position).getName());
             intent.putExtra("playListDescription",playlist.getPlaylists().get(position).getDescription());
             intent.putExtra("isLove",3);
+            intent.putExtra("userId",userId);
             startActivity(intent);
         }
     };
@@ -183,7 +193,7 @@ public class MusicListFragment extends BaseFragment<WowPresenter> implements Wow
     }
 
     private void lazyLoadPlayList(int page) {
-        if (playlist.getPlaylists().size() == 0 || totalPage >= 30) {
+        if (playlist.getPlaylists().size() == 0 || totalPage >= 48) {
             return;
         }
         list.addAll(playlist.getPlaylists().subList(totalPage,totalPage+page * INIT_LOAD_LINE));

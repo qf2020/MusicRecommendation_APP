@@ -14,10 +14,6 @@ import cjk.design.music.R;
 
 /**
  *
- * @description 标题栏
- * @author guoxiaozhe
- * @time 2021/11/30 9:17
- * @email 1041347917@qq.com
  *
  */
 public class TitleLayoutView extends LinearLayout {

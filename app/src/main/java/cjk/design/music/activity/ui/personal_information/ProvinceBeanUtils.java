@@ -3,10 +3,6 @@ import com.contrarywind.interfaces.IPickerViewData;
 
 /**
  *
- * @description 对于province的get与set操作
- * @author guoxiaozhe
- * @time 2021/11/23 16:28
- * @email 1041347917@qq.com
  *
  */
 public class ProvinceBeanUtils implements IPickerViewData {

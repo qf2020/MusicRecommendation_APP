@@ -22,7 +22,6 @@ import cjk.design.music.utils.binding.ViewBinder;
 
 /**
  * 更新天气
- * Created by wcy on 2016/1/17.
  * <p>
  * 天气现象表
  * <p>

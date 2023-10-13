@@ -1,6 +1,7 @@
 package cjk.design.music.service;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -13,8 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cjk.design.music.activity.login.LoginActivity;
+import cjk.design.music.activity.signup.SignUpPasswordActivity;
 import cjk.design.music.application.Notifier3;
 import cjk.design.music.enums.PlayModeEnum;
+import cjk.design.music.http.HttpCallback;
+import cjk.design.music.http.HttpClient;
 import cjk.design.music.model.Music;
 import cjk.design.music.receiver.NoisyAudioStreamReceiver;
 import cjk.design.music.storage.db.DBManager;
@@ -38,6 +43,7 @@ public class AudioPlayer {
     private Handler handler;
     private NoisyAudioStreamReceiver noisyReceiver;
     private IntentFilter noisyFilter;
+    private int userId;
     private List<Music> musicList = new ArrayList<>(); //歌曲列表部分 Music是歌单信息
     private final List<OnPlayerEventListener> listeners = new ArrayList<>();
     private int state = STATE_IDLE;
@@ -48,19 +54,17 @@ public class AudioPlayer {
 
     private static class SingletonHolder {
         private static AudioPlayer instance = new AudioPlayer();
-        //之所以这样实现是为了全局变量实现
     }
 
     private AudioPlayer() {
     }
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public void init(Context context) {
         this.context = context.getApplicationContext();
-//        Uri setDataSourceuri = Uri.parse("android.resource://cjk.design.music/"+ R.raw.yanyuan_xuezhiqian);
-//        Music music = new Music((long)1,1,01,"演员","薛之谦","热血专辑",01,"http://p2.music.126.net/oS3ZLQ66uGPMnnOJDzDlBw==/19093019417022416.jpg",344000,setDataSourceuri.toString(),null,100);
-        // musicList = DBManager.get().getMusicDao().queryBuilder().build().list();//这边获取音乐list
-//        MusicData musicData = new MusicData();
-//        musicList.addAll(musicData.musicList);
         audioFocusManager = new AudioFocusManager(context);
         mediaPlayer = new MediaPlayer();
         handler = new Handler(Looper.getMainLooper());
@@ -90,6 +94,20 @@ public class AudioPlayer {
     }
 
     public void addAndPlay(Music music) {
+
+        Music music1 = getPlayMusic();
+        if (music1!=null){
+            HttpClient.addAction(userId,String.valueOf(music1.getSongId()), String.valueOf(mediaPlayer.getCurrentPosition()),"1", new HttpCallback<String>() {
+                @Override
+                public void onSuccess(String s) {
+                }
+                @Override
+                public void onFail(Exception e) {
+                }
+            });
+        }
+
+
         int position = musicList.indexOf(music);
         if (position < 0) {
             musicList.add(music);
@@ -122,6 +140,7 @@ public class AudioPlayer {
 
         setPlayPosition(position);
         Music music = getPlayMusic();
+
 
         try {
             Uri setDataSourceuri = Uri.parse(music.getPath());
@@ -243,6 +262,17 @@ public class AudioPlayer {
                 break;
             case LOOP:
             default:
+                Music music = getPlayMusic();
+                HttpClient.addAction(userId,String.valueOf(music.getSongId()), String.valueOf(mediaPlayer.getCurrentPosition()),"1", new HttpCallback<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                    }
+                    @Override
+                    public void onFail(Exception e) {
+                    }
+                });
+
+                System.out.println("当前播放进度"+mediaPlayer.getCurrentPosition());
                 play(getPlayPosition() + 1);
                 break;
         }

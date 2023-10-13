@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import cjk.design.music.R;
+import cjk.design.music.activity.MusicPlayActivity;
 import cjk.design.music.activity.Playlist1Activity;
 import cjk.design.music.model.Music;
 import cjk.design.music.service.AudioPlayer;
@@ -33,12 +34,16 @@ public class ControlPanel implements View.OnClickListener, OnPlayerEventListener
     private ImageView vPlayBarPlaylist;
     @Bind(R.id.pb_play_bar)
     private ProgressBar mProgressBar;
+    private Context context;
 
     public ControlPanel(View view) {
         ViewBinder.bind(this, view);
         ivPlayBarPlay.setOnClickListener(this);
         vPlayBarPlaylist.setOnClickListener(this);
+        ivPlayBarCover.setOnClickListener(this);
+        context = vPlayBarPlaylist.getContext();
         onChange(AudioPlayer.get().getPlayMusic());
+
     }
 
     @Override
@@ -48,9 +53,13 @@ public class ControlPanel implements View.OnClickListener, OnPlayerEventListener
                 AudioPlayer.get().playPause();
                 break;
             case R.id.v_play_bar_playlist:
-                Context context = vPlayBarPlaylist.getContext();
+
                 Intent intent = new Intent(context, Playlist1Activity.class);
                 context.startActivity(intent);
+                break;
+            case R.id.iv_play_bar_cover:
+                Intent intent1 = new Intent(context, MusicPlayActivity.class);
+                context.startActivity(intent1);
                 break;
         }
     }

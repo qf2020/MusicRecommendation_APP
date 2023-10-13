@@ -3,9 +3,10 @@ package cjk.design.music.activity.login;
 import java.util.List;
 
 public class LoginBean {
+
     /**
      * total : 1
-     * rows : [{"userId":2,"phone":"1","password":"123"}]
+     * rows : [{"userId":3,"phone":"13142180962","password":"123456Abc","userIdRec":null}]
      * code : 200
      * msg : 查询成功
      */
@@ -49,19 +50,29 @@ public class LoginBean {
 
     public static class RowsBean {
         /**
-         * userId : 2
-         * phone : 1
-         * password : 123
+         * userId : 3
+         * phone : 13142180962
+         * password : 123456Abc
+         * userIdRec : null
          */
 
         private int userId;
         private String phone;
         private String password;
+        private String userIdRec;
 
         public RowsBean(String phone,String password){
             this.phone = phone;
             this.password = password;
         }
+
+        public RowsBean(int userId,String phone,String password,String userIdRec){
+            this.userId = userId;
+            this.phone = phone;
+            this.password = password;
+            this.userIdRec = userIdRec;
+        }
+
 
         public int getUserId() {
             return userId;
@@ -85,6 +96,14 @@ public class LoginBean {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public String getUserIdRec() {
+            return userIdRec;
+        }
+
+        public void setUserIdRec(String userIdRec) {
+            this.userIdRec = userIdRec;
         }
     }
 }
